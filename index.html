@@ -82,18 +82,32 @@ box-shadow:0 0 60px rgba(0,255,245,.06),0 0 120px rgba(157,0,255,.05),inset 0 1p
 .auth-logo{
 text-align:center;
 font-family:‘Syncopate’,sans-serif;
-font-size:clamp(30px,9vw,52px);
+font-size:clamp(36px,10vw,54px);
 font-weight:700;
-letter-spacing:8px;
-margin-bottom:6px;
+letter-spacing:10px;
+margin-bottom:8px;
 line-height:1.1;
-background:linear-gradient(90deg,var(–c-cyan),var(–c-pink),var(–c-yellow),var(–c-cyan));
-background-size:300%;
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-background-clip:text;
-animation:chromaShift 3s linear infinite, logoPulse 2.5s ease-in-out infinite;
-filter:drop-shadow(0 0 18px rgba(0,255,245,.5)) drop-shadow(0 0 40px rgba(255,0,122,.25));
+color:var(–c-cyan);
+text-shadow:
+0 0 10px var(–c-cyan),
+0 0 30px var(–c-cyan),
+0 0 60px rgba(0,255,245,.5),
+0 0 100px rgba(0,255,245,.3);
+animation:logoGlow 2s ease-in-out infinite;
+}
+@keyframes logoGlow{
+0%,100%{
+color:#00fff5;
+text-shadow:0 0 10px #00fff5,0 0 30px #00fff5,0 0 60px rgba(0,255,245,.5),0 0 100px rgba(0,255,245,.3);
+}
+33%{
+color:#ff007a;
+text-shadow:0 0 10px #ff007a,0 0 30px #ff007a,0 0 60px rgba(255,0,122,.5),0 0 100px rgba(255,0,122,.3);
+}
+66%{
+color:#ffee00;
+text-shadow:0 0 10px #ffee00,0 0 30px #ffee00,0 0 60px rgba(255,238,0,.5),0 0 100px rgba(255,238,0,.3);
+}
 }
 @keyframes logoPulse{
 0%,100%{filter:drop-shadow(0 0 18px rgba(0,255,245,.5)) drop-shadow(0 0 40px rgba(255,0,122,.25));}
@@ -137,7 +151,7 @@ display:flex;align-items:center;gap:10px;flex-wrap:wrap;
 background:linear-gradient(180deg,rgba(2,3,10,.95),transparent);
 pointer-events:auto;
 }
-.hud-logo{font-family:‘Syncopate’,sans-serif;font-size:11px;letter-spacing:4px;background:linear-gradient(90deg,var(–c-cyan),var(–c-pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;flex-shrink:0;}
+.hud-logo{font-family:‘Syncopate’,sans-serif;font-size:11px;letter-spacing:4px;color:var(–c-cyan);text-shadow:0 0 8px var(–c-cyan);flex-shrink:0;}
 
 .stat-group{display:flex;flex-direction:column;gap:3px;width:110px;}
 .stat-row{display:flex;align-items:center;gap:5px;}
@@ -200,7 +214,9 @@ pointer-events:auto;
 ══════════════════════════════════════ */
 #touchControls{
 position:fixed;inset:0;pointer-events:none;z-index:20;
-display:none; /* affiché seulement en jeu sur mobile */
+display:none;
+visibility:hidden;
+opacity:0;
 }
 
 /* Joystick GAUCHE (mouvement) */
@@ -327,19 +343,15 @@ padding:20px;
 }
 .lock-title{
 font-family:‘Syncopate’,sans-serif;
-font-size:clamp(36px,10vw,64px);
+font-size:clamp(42px,12vw,72px);
 font-weight:700;
 letter-spacing:10px;
 text-align:center;
-background:linear-gradient(90deg,var(–c-cyan),var(–c-pink),var(–c-yellow),var(–c-cyan));
-background-size:300%;
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-background-clip:text;
-animation:chromaShift 3s linear infinite, logoPulse 2.5s ease-in-out infinite;
+color:#00fff5;
+animation:logoGlow 2s ease-in-out infinite;
 }
 .lock-sub{font-family:‘Share Tech Mono’,monospace;font-size:10px;letter-spacing:4px;color:rgba(255,255,255,.3);text-align:center;text-transform:uppercase;}
-.lock-hint{font-family:‘Share Tech Mono’,monospace;font-size:10px;letter-spacing:2px;color:rgba(0,255,245,.4);text-align:center;margin-top:-10px;}
+.lock-hint{font-family:‘Share Tech Mono’,monospace;font-size:9px;letter-spacing:4px;color:rgba(0,255,245,.3);text-align:center;margin-top:-14px;text-transform:uppercase;}
 .lock-btn{
 padding:16px 44px;border-radius:4px;cursor:pointer;
 font-family:‘Syncopate’,sans-serif;font-size:10px;letter-spacing:3px;
@@ -398,8 +410,8 @@ transition:all .3s;min-height:52px;min-width:200px;
 <div id="hud">
   <div id="lockOverlay">
     <div class="lock-title">RYONIX</div>
-    <div class="lock-sub">// Open World Cyberpunk //</div>
-    <div class="lock-hint" id="lockHint">📱 Joysticks tactiles inclus</div>
+    <div class="lock-sub">// Nouvelle Ère Virtuelle //</div>
+    <div class="lock-hint" id="lockHint">// TOUCH READY //</div>
     <button class="lock-btn" id="lockBtn">[ ENTRER DANS LA VILLE ]</button>
   </div>
 
@@ -447,7 +459,7 @@ transition:all .3s;min-height:52px;min-width:200px;
 
 <!-- ══ CONTRÔLES TACTILES ══ -->
 
-<div id="touchControls">
+<div id="touchControls" style="display:none!important;visibility:hidden;opacity:0;">
 
   <!-- Joystick gauche : MOUVEMENT -->
 
@@ -475,7 +487,7 @@ transition:all .3s;min-height:52px;min-width:200px;
 
   <!-- Bouton chat -->
 
-<button id="btnChat" onclick="openChat()">💬 CHAT</button>
+<button id="btnChat" onclick="openChat()">💬</button>
 
 </div>
 
@@ -562,8 +574,12 @@ let touchSprinting=false,touchJumping=false
 
 function initTouchControls(){
   if(!IS_TOUCH)return
-  document.getElementById('touchControls').style.display='block'
-  document.getElementById('lockHint').textContent='📱 Joysticks tactiles activés'
+  const tc=document.getElementById('touchControls');
+  tc.removeAttribute('style');
+  tc.style.display='block';
+  tc.style.visibility='visible';
+  tc.style.opacity='1'
+  document.getElementById('lockHint').textContent='// TOUCH READY //'
 
   const jL=document.getElementById('joyLeft')
   const jR=document.getElementById('joyRight')
