@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<title>NEON CITY — Cyberpunk Universe</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap');
+
+:root{
+–c-cyan:#00fff5;
+–c-pink:#ff007a;
+–c-yellow:#ffee00;
+–c-purple:#9d00ff;
+–c-orange:#ff6a00;
+–dark:#02030a;
+–panel:rgba(2,5,18,0.88);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(–dark);}
+body{font-family:‘Rajdhani’,sans-serif;touch-action:none;}
+
+/* Cacher le curseur sur desktop */
+@media (pointer:fine){body{cursor:none;}}
+
+/* ══ CURSEUR (desktop seulement) ══ */
+#cur{
+position:fixed;z-index:9999;pointer-events:none;
+width:28px;height:28px;transform:translate(-50%,-50%);
+}
+#cur .ring{position:absolute;inset:0;border:1.5px solid var(–c-cyan);border-radius:50%;animation:curRing 1.8s ease-in-out infinite;}
+#cur .dot{position:absolute;top:50%;left:50%;width:5px;height:5px;background:var(–c-cyan);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 8px var(–c-cyan);}
+@keyframes curRing{0%,100%{transform:scale(1);opacity:.8;}50%{transform:scale(1.5);opacity:.3;}}
+@media (pointer:coarse){#cur{display:none;}}
+
+/* scanlines */
+#glitchBg{
+position:fixed;inset:0;z-index:0;pointer-events:none;
+background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,245,.012) 2px,rgba(0,255,245,.012) 4px);
+}
+
+#gc{position:fixed;inset:0;display:block;}
+
+/* ══════════════════════════════════════
+AUTH
+══════════════════════════════════════ */
+#authWrap{
+position:fixed;inset:0;z-index:200;
+display:flex;align-items:center;justify-content:center;
+background:var(–dark);padding:16px;
+}
+#authBg{position:absolute;inset:0;overflow:hidden;}
+.bg-grid{
+position:absolute;inset:0;
+background-image:linear-gradient(rgba(0,255,245,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,245,.04) 1px,transparent 1px);
+background-size:40px 40px;animation:gridMove 20s linear infinite;
+}
+@keyframes gridMove{0%{background-position:0 0;}100%{background-position:40px 40px;}}
+.speed-line{position:absolute;height:1px;background:linear-gradient(90deg,transparent,var(–c-cyan),transparent);opacity:0;animation:speedLine 3s ease-in-out infinite;}
+@keyframes speedLine{0%{opacity:0;left:-10%;}30%{opacity:.6;}100%{opacity:0;left:110%;}}
+
+#authCard{
+position:relative;width:100%;max-width:430px;
+background:linear-gradient(145deg,rgba(2,8,25,.95),rgba(5,2,20,.95));
+border:1px solid rgba(0,255,245,.15);border-radius:8px;
+padding:clamp(28px,5vw,48px) clamp(20px,5vw,40px);
+backdrop-filter:blur(30px);
+box-shadow:0 0 60px rgba(0,255,245,.06),0 0 120px rgba(157,0,255,.05),inset 0 1px 0 rgba(255,255,255,.04);
+}
+.corner{position:absolute;width:14px;height:14px;border-color:var(–c-cyan);border-style:solid;opacity:.6;}
+.corner.tl{top:10px;left:10px;border-width:2px 0 0 2px;}
+.corner.tr{top:10px;right:10px;border-width:2px 2px 0 0;}
+.corner.bl{bottom:10px;left:10px;border-width:0 0 2px 2px;}
+.corner.br{bottom:10px;right:10px;border-width:0 2px 2px 0;}
+
+.auth-logo{
+text-align:center;font-family:‘Syncopate’,sans-serif;font-size:clamp(22px,6vw,34px);font-weight:700;
+letter-spacing:6px;margin-bottom:4px;
+background:linear-gradient(90deg,var(–c-cyan),var(–c-pink),var(–c-yellow),var(–c-cyan));
+background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+animation:chromaShift 4s linear infinite;
+}
+@keyframes chromaShift{0%{background-position:0%;}100%{background-position:300%;}}
+.auth-sub{text-align:center;font-family:‘Share Tech Mono’,monospace;font-size:9px;letter-spacing:4px;color:rgba(0,255,245,.3);text-transform:uppercase;margin-bottom:28px;}
+
+.tabs{display:flex;margin-bottom:24px;gap:2px;}
+.tab{flex:1;padding:10px;text-align:center;cursor:pointer;font-family:‘Syncopate’,sans-serif;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,.3);background:rgba(0,255,245,.03);border:1px solid rgba(0,255,245,.08);border-radius:3px;transition:all .2s;}
+.tab.on{color:var(–c-cyan);background:rgba(0,255,245,.08);border-color:rgba(0,255,245,.3);}
+
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(0,255,245,.4);margin-bottom:7px;font-family:‘Share Tech Mono’,monospace;}
+.field input{width:100%;padding:12px 15px;background:rgba(0,255,245,.04);border:1px solid rgba(0,255,245,.12);border-radius:4px;color:#fff;font-family:‘Share Tech Mono’,monospace;font-size:14px;outline:none;transition:all .2s;-webkit-appearance:none;}
+.field input:focus{border-color:var(–c-cyan);box-shadow:0 0 20px rgba(0,255,245,.12);}
+
+.btn-neon{
+width:100%;padding:14px;margin-top:4px;background:transparent;
+border:1px solid var(–c-cyan);color:var(–c-cyan);cursor:pointer;border-radius:4px;
+font-family:‘Syncopate’,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;
+position:relative;overflow:hidden;transition:all .25s;
+-webkit-appearance:none;min-height:48px;
+}
+.btn-neon:hover,.btn-neon:active{background:rgba(0,255,245,.1);box-shadow:0 0 30px rgba(0,255,245,.25);}
+
+#authMsg{text-align:center;margin-top:14px;font-size:12px;min-height:18px;letter-spacing:1px;font-family:‘Share Tech Mono’,monospace;}
+#authMsg.err{color:var(–c-pink);}
+#authMsg.ok{color:var(–c-cyan);}
+
+/* ══════════════════════════════════════
+HUD
+══════════════════════════════════════ */
+#hud{position:fixed;inset:0;pointer-events:none;display:none;z-index:10;}
+
+/* Topbar — plus compact sur mobile */
+#topbar{
+position:absolute;top:0;left:0;right:0;
+padding:8px 12px;
+display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+background:linear-gradient(180deg,rgba(2,3,10,.95),transparent);
+pointer-events:auto;
+}
+.hud-logo{font-family:‘Syncopate’,sans-serif;font-size:11px;letter-spacing:4px;background:linear-gradient(90deg,var(–c-cyan),var(–c-pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;flex-shrink:0;}
+
+.stat-group{display:flex;flex-direction:column;gap:3px;width:110px;}
+.stat-row{display:flex;align-items:center;gap:5px;}
+.stat-ico{font-size:9px;width:12px;text-align:center;}
+.stat-name{font-family:‘Share Tech Mono’,monospace;font-size:7px;letter-spacing:1px;color:rgba(255,255,255,.35);width:22px;}
+.bar-bg{flex:1;height:3px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;}
+.bar-f{height:100%;border-radius:2px;transition:width .4s;}
+#hpF{background:linear-gradient(90deg,#ff0055,#ff4488);}
+#enF{background:linear-gradient(90deg,var(–c-purple),var(–c-cyan));}
+#xpF{background:linear-gradient(90deg,var(–c-yellow),var(–c-orange));}
+
+#pInfo{margin-left:auto;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+#pTag{font-family:‘Share Tech Mono’,monospace;font-size:10px;color:var(–c-cyan);letter-spacing:1px;}
+#credDisplay{font-family:‘Syncopate’,sans-serif;font-size:10px;color:var(–c-yellow);}
+.hud-btn{padding:5px 10px;background:rgba(0,255,245,.06);border:1px solid rgba(0,255,245,.15);color:rgba(255,255,255,.5);border-radius:3px;cursor:pointer;font-family:‘Share Tech Mono’,monospace;font-size:10px;pointer-events:auto;min-height:36px;}
+
+/* Zone badge */
+#zoneBadge{position:absolute;top:56px;left:50%;transform:translateX(-50%);background:rgba(2,5,18,.8);border:1px solid rgba(0,255,245,.15);border-radius:20px;padding:4px 14px;font-family:‘Syncopate’,sans-serif;font-size:8px;letter-spacing:3px;color:var(–c-cyan);text-transform:uppercase;backdrop-filter:blur(10px);pointer-events:none;white-space:nowrap;}
+
+/* Minimap — petit sur mobile */
+#minimap{position:absolute;top:80px;right:10px;width:120px;height:120px;background:rgba(2,5,18,.85);border:1px solid rgba(0,255,245,.1);border-radius:8px;overflow:hidden;}
+#mmCanvas{width:100%;height:100%;}
+.mm-label{position:absolute;bottom:5px;left:0;right:0;text-align:center;font-family:‘Share Tech Mono’,monospace;font-size:7px;letter-spacing:1px;color:rgba(0,255,245,.35);pointer-events:none;}
+
+/* Joueurs en ligne — caché sur petit écran */
+#onlineWrap{position:absolute;top:80px;left:10px;width:150px;background:rgba(2,5,18,.85);border:1px solid rgba(0,255,245,.08);border-radius:8px;padding:12px;backdrop-filter:blur(10px);}
+#onlineWrap h3{font-family:‘Syncopate’,sans-serif;font-size:7px;letter-spacing:2px;color:var(–c-cyan);margin-bottom:10px;}
+#pList{list-style:none;display:flex;flex-direction:column;gap:6px;}
+#pList li{font-size:11px;color:rgba(255,255,255,.6);display:flex;align-items:center;gap:7px;}
+.pdot{width:6px;height:6px;border-radius:50%;flex-shrink:0;animation:pdotPulse 2s infinite;}
+@keyframes pdotPulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+/* Notifs */
+#notifs{position:absolute;top:80px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;gap:6px;align-items:center;z-index:50;pointer-events:none;width:90%;max-width:340px;}
+.notif{padding:7px 18px;border-radius:30px;font-family:‘Syncopate’,sans-serif;font-size:8px;letter-spacing:2px;animation:notifIn .3s ease both;backdrop-filter:blur(12px);white-space:nowrap;text-align:center;}
+@keyframes notifIn{from{opacity:0;transform:translateY(-12px) scale(.9);}to{opacity:1;transform:translateY(0) scale(1);}}
+.notif.cyan{background:rgba(0,255,245,.12);border:1px solid rgba(0,255,245,.3);color:var(–c-cyan);}
+.notif.pink{background:rgba(255,0,122,.12);border:1px solid rgba(255,0,122,.3);color:var(–c-pink);}
+.notif.gold{background:rgba(255,238,0,.12);border:1px solid rgba(255,238,0,.3);color:var(–c-yellow);}
+
+/* Stats */
+#statsWrap{position:absolute;bottom:220px;right:10px;display:flex;flex-direction:column;gap:5px;align-items:flex-end;}
+.spill{background:rgba(2,5,18,.85);border:1px solid rgba(0,255,245,.09);border-radius:6px;padding:4px 10px;font-family:‘Share Tech Mono’,monospace;font-size:9px;letter-spacing:1px;display:flex;gap:6px;align-items:center;}
+.spill .sv{color:var(–c-cyan);}
+
+/* Chat (compact) */
+#chatWrap{position:absolute;bottom:10px;left:10px;width:240px;background:rgba(2,5,18,.88);border:1px solid rgba(0,255,245,.08);border-radius:8px;overflow:hidden;backdrop-filter:blur(15px);pointer-events:auto;}
+#chatMsgs{height:100px;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:4px;}
+#chatMsgs::-webkit-scrollbar{width:2px;}
+#chatMsgs::-webkit-scrollbar-thumb{background:rgba(0,255,245,.2);}
+.cmsg{font-size:10px;line-height:1.4;font-family:‘Share Tech Mono’,monospace;}
+.cmsg .cn{font-weight:bold;}
+.cmsg.sys{color:rgba(255,255,255,.3);font-style:italic;font-size:9px;}
+#chatRow{display:flex;border-top:1px solid rgba(0,255,245,.07);}
+#chatIn{flex:1;padding:7px 10px;background:transparent;border:none;color:#fff;font-family:‘Share Tech Mono’,monospace;font-size:12px;outline:none;}
+#chatSnd{padding:7px 12px;background:rgba(0,255,245,.06);border:none;color:var(–c-cyan);cursor:pointer;font-size:12px;pointer-events:auto;min-width:36px;min-height:36px;}
+
+/* ══════════════════════════════════════
+🕹️ CONTRÔLES TACTILES
+══════════════════════════════════════ */
+#touchControls{
+position:fixed;inset:0;pointer-events:none;z-index:20;
+display:none; /* affiché seulement en jeu sur mobile */
+}
+
+/* Joystick GAUCHE (mouvement) */
+#joyLeft{
+position:absolute;
+bottom:30px;left:30px;
+width:120px;height:120px;
+pointer-events:auto;
+}
+.joy-base{
+position:absolute;inset:0;border-radius:50%;
+background:rgba(0,255,245,.06);
+border:2px solid rgba(0,255,245,.2);
+backdrop-filter:blur(4px);
+}
+.joy-knob{
+position:absolute;
+width:48px;height:48px;border-radius:50%;
+background:radial-gradient(circle at 35% 35%,rgba(0,255,245,.4),rgba(0,255,245,.15));
+border:2px solid rgba(0,255,245,.6);
+top:50%;left:50%;transform:translate(-50%,-50%);
+box-shadow:0 0 20px rgba(0,255,245,.3);
+transition:box-shadow .1s;
+pointer-events:none;
+}
+.joy-label{
+position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+font-family:‘Share Tech Mono’,monospace;font-size:8px;letter-spacing:2px;
+color:rgba(0,255,245,.3);text-transform:uppercase;white-space:nowrap;
+}
+
+/* Joystick DROIT (caméra) */
+#joyRight{
+position:absolute;
+bottom:30px;right:30px;
+width:120px;height:120px;
+pointer-events:auto;
+}
+#joyRight .joy-knob{
+background:radial-gradient(circle at 35% 35%,rgba(255,0,122,.4),rgba(255,0,122,.15));
+border-color:rgba(255,0,122,.6);
+box-shadow:0 0 20px rgba(255,0,122,.3);
+}
+#joyRight .joy-base{
+border-color:rgba(255,0,122,.2);
+background:rgba(255,0,122,.05);
+}
+
+/* Bouton SAUT */
+#btnJump{
+position:absolute;
+bottom:150px;right:40px;
+width:70px;height:70px;border-radius:50%;
+background:rgba(0,255,245,.1);
+border:2px solid rgba(0,255,245,.4);
+color:var(–c-cyan);
+font-family:‘Syncopate’,sans-serif;font-size:8px;letter-spacing:1px;
+display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;
+pointer-events:auto;cursor:pointer;
+box-shadow:0 0 20px rgba(0,255,245,.15);
+transition:all .1s;
+-webkit-appearance:none;
+}
+#btnJump:active{background:rgba(0,255,245,.25);box-shadow:0 0 35px rgba(0,255,245,.4);transform:scale(.95);}
+#btnJump span{font-size:18px;}
+
+/* Bouton SPRINT */
+#btnSprint{
+position:absolute;
+bottom:150px;left:40px;
+width:70px;height:70px;border-radius:50%;
+background:rgba(255,0,122,.08);
+border:2px solid rgba(255,0,122,.3);
+color:var(–c-pink);
+font-family:‘Syncopate’,sans-serif;font-size:7px;letter-spacing:1px;
+display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;
+pointer-events:auto;cursor:pointer;
+box-shadow:0 0 20px rgba(255,0,122,.1);
+transition:all .1s;
+-webkit-appearance:none;
+}
+#btnSprint:active,#btnSprint.on{background:rgba(255,0,122,.2);box-shadow:0 0 35px rgba(255,0,122,.35);}
+#btnSprint span{font-size:18px;}
+
+/* Bouton CHAT */
+#btnChat{
+position:absolute;
+bottom:240px;left:50%;transform:translateX(-50%);
+padding:8px 20px;border-radius:20px;
+background:rgba(2,5,18,.7);border:1px solid rgba(0,255,245,.2);
+color:rgba(0,255,245,.6);font-family:‘Share Tech Mono’,monospace;font-size:10px;letter-spacing:2px;
+pointer-events:auto;cursor:pointer;
+-webkit-appearance:none;
+}
+
+/* Zone sécurisée iOS */
+@supports (padding-bottom: env(safe-area-inset-bottom)){
+#joyLeft,#joyRight{bottom:calc(30px + env(safe-area-inset-bottom));}
+#btnJump,#btnSprint{bottom:calc(150px + env(safe-area-inset-bottom));}
+}
+
+/* Sur desktop : cacher les contrôles tactiles */
+@media (pointer:fine){
+#touchControls{display:none !important;}
+#statsWrap{bottom:16px;}
+#chatWrap{width:300px;bottom:16px;}
+#chatMsgs{height:130px;}
+/* Afficher le panneau online sur desktop */
+}
+
+/* Responsive minimap */
+@media (max-width:480px){
+#minimap{width:90px;height:90px;top:80px;right:8px;}
+#onlineWrap{display:none;} /* Caché sur très petit écran */
+#chatWrap{width:200px;}
+}
+
+/* Lock overlay */
+#lockOverlay{
+position:fixed;inset:0;z-index:50;
+display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;
+background:rgba(2,3,10,.85);backdrop-filter:blur(6px);
+padding:20px;
+}
+.lock-title{
+font-family:‘Syncopate’,sans-serif;font-size:clamp(28px,8vw,52px);font-weight:700;
+letter-spacing:6px;text-align:center;
+background:linear-gradient(90deg,var(–c-cyan),var(–c-pink),var(–c-yellow),var(–c-cyan));
+background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+animation:chromaShift 3s linear infinite;
+}
+.lock-sub{font-family:‘Share Tech Mono’,monospace;font-size:10px;letter-spacing:4px;color:rgba(255,255,255,.3);text-align:center;text-transform:uppercase;}
+.lock-hint{font-family:‘Share Tech Mono’,monospace;font-size:10px;letter-spacing:2px;color:rgba(0,255,245,.4);text-align:center;margin-top:-10px;}
+.lock-btn{
+padding:16px 44px;border-radius:4px;cursor:pointer;
+font-family:‘Syncopate’,sans-serif;font-size:10px;letter-spacing:3px;
+background:transparent;border:1px solid var(–c-cyan);color:var(–c-cyan);
+transition:all .3s;min-height:52px;min-width:200px;
+-webkit-appearance:none;
+}
+.lock-btn:hover,.lock-btn:active{background:rgba(0,255,245,.12);box-shadow:0 0 40px rgba(0,255,245,.3);}
+</style>
+
+</head>
+<body>
+
+<div id="cur"><div class="ring"></div><div class="dot"></div></div>
+<div id="glitchBg"></div>
+
+<!-- ══ AUTH ══ -->
+
+<div id="authWrap">
+  <div id="authBg">
+    <div class="bg-grid"></div>
+    <div class="speed-line" style="top:20%;animation-delay:0s;width:60%;"></div>
+    <div class="speed-line" style="top:50%;animation-delay:1.2s;width:45%;"></div>
+    <div class="speed-line" style="top:75%;animation-delay:.6s;width:70%;"></div>
+  </div>
+  <div id="authCard">
+    <div class="corner tl"></div><div class="corner tr"></div>
+    <div class="corner bl"></div><div class="corner br"></div>
+    <div class="auth-logo">NEON CITY</div>
+    <div class="auth-sub">// cyberpunk open world //</div>
+    <div class="tabs">
+      <div class="tab on" onclick="showT('l')">Connexion</div>
+      <div class="tab" onclick="showT('r')">S'inscrire</div>
+    </div>
+    <div id="fL">
+      <div class="field"><label>// Email</label><input id="lE" type="email" inputmode="email" placeholder="runner@neoncity.gg" autocomplete="email"/></div>
+      <div class="field"><label>// Password</label><input id="lP" type="password" placeholder="••••••••" autocomplete="current-password"/></div>
+      <button class="btn-neon" onclick="doLogin()">[ ACCÉDER AU RÉSEAU ]</button>
+    </div>
+    <div id="fR" style="display:none">
+      <div class="field"><label>// Runner Tag</label><input id="rN" type="text" placeholder="GlitchRunner99" autocomplete="username"/></div>
+      <div class="field"><label>// Email</label><input id="rE" type="email" inputmode="email" placeholder="runner@neoncity.gg" autocomplete="email"/></div>
+      <div class="field"><label>// Password</label><input id="rP" type="password" placeholder="Min. 6 chars" autocomplete="new-password"/></div>
+      <button class="btn-neon" onclick="doReg()">[ CRÉER MON RUNNER ]</button>
+    </div>
+    <div id="authMsg"></div>
+  </div>
+</div>
+
+<!-- ══ CANVAS ══ -->
+
+<canvas id="gc"></canvas>
+
+<!-- ══ HUD ══ -->
+
+<div id="hud">
+  <div id="lockOverlay">
+    <div class="lock-title">NEON CITY</div>
+    <div class="lock-sub">// Open World Cyberpunk //</div>
+    <div class="lock-hint" id="lockHint">📱 Joysticks tactiles inclus</div>
+    <button class="lock-btn" id="lockBtn">[ ENTRER DANS LA VILLE ]</button>
+  </div>
+
+  <div id="topbar">
+    <div class="hud-logo">NC//</div>
+    <div class="stat-group">
+      <div class="stat-row"><span class="stat-ico">♥</span><span class="stat-name">VIE</span><div class="bar-bg"><div class="bar-f" id="hpF" style="width:100%"></div></div></div>
+      <div class="stat-row"><span class="stat-ico">⚡</span><span class="stat-name">EN</span><div class="bar-bg"><div class="bar-f" id="enF" style="width:75%"></div></div></div>
+      <div class="stat-row"><span class="stat-ico">★</span><span class="stat-name">XP</span><div class="bar-bg"><div class="bar-f" id="xpF" style="width:0%"></div></div></div>
+    </div>
+    <div id="pInfo">
+      <span id="pTag">—</span>
+      <span id="credDisplay">₿ 0</span>
+      <button class="hud-btn" onclick="doOut()">EXIT</button>
+    </div>
+  </div>
+
+  <div id="zoneBadge">◈ DOWNTOWN</div>
+
+  <div id="minimap">
+    <canvas id="mmCanvas" width="120" height="120"></canvas>
+    <div class="mm-label">MAP</div>
+  </div>
+
+  <div id="onlineWrap">
+    <h3>◈ Runners</h3>
+    <ul id="pList"></ul>
+  </div>
+
+  <div id="notifs"></div>
+
+  <div id="statsWrap">
+    <div class="spill">FPS <span class="sv" id="sv_fps">60</span></div>
+    <div class="spill">SPD <span class="sv" id="sv_spd">0</span></div>
+  </div>
+
+  <div id="chatWrap">
+    <div id="chatMsgs"></div>
+    <div id="chatRow">
+      <input id="chatIn" type="text" placeholder="// message..." maxlength="100"/>
+      <button id="chatSnd" onclick="sendChat()">▶</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONTRÔLES TACTILES ══ -->
+
+<div id="touchControls">
+
+  <!-- Joystick gauche : MOUVEMENT -->
+
+  <div id="joyLeft">
+    <div class="joy-base"></div>
+    <div class="joy-knob" id="joyLKnob"></div>
+    <div class="joy-label">BOUGER</div>
+  </div>
+
+  <!-- Joystick droit : CAMÉRA -->
+
+  <div id="joyRight">
+    <div class="joy-base"></div>
+    <div class="joy-knob" id="joyRKnob"></div>
+    <div class="joy-label">CAMÉRA</div>
+  </div>
+
+  <!-- Bouton saut -->
+
+<button id="btnJump"><span>⬆</span>SAUT</button>
+
+  <!-- Bouton sprint -->
+
+<button id="btnSprint"><span>⚡</span>SPRINT</button>
+
+  <!-- Bouton chat -->
+
+<button id="btnChat" onclick="openChat()">💬 CHAT</button>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+// ══════════════════════════════════════════
+//  ⚙️ REMPLACE CES CLÉS SUPABASE
+// ══════════════════════════════════════════
+const SB_URL = 'https://TON_PROJECT.supabase.co'
+const SB_KEY = 'TA_ANON_KEY_ICI'
+const sb = window.supabase.createClient(SB_URL, SB_KEY)
+
+// ─── Détection mobile ───
+const IS_TOUCH = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0)
+
+// ─── Curseur (desktop seulement) ───
+if(!IS_TOUCH){
+  const cur=document.getElementById('cur')
+  document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px'})
+}
+
+// ══════════════════════════════════════════
+//  AUTH
+// ══════════════════════════════════════════
+let ME=null,MYNAME=''
+
+function showT(t){
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('on',(i===0)===(t==='l')))
+  document.getElementById('fL').style.display=t==='l'?'block':'none'
+  document.getElementById('fR').style.display=t==='r'?'block':'none'
+  msg('')
+}
+function msg(m,type=''){const el=document.getElementById('authMsg');el.textContent=m;el.className=type}
+
+async function doLogin(){
+  msg('// connexion...','ok')
+  const {data,error}=await sb.auth.signInWithPassword({email:document.getElementById('lE').value,password:document.getElementById('lP').value})
+  if(error)return msg(error.message,'err')
+  ME=data.user;await loadName();boot()
+}
+async function doReg(){
+  const name=document.getElementById('rN').value.trim()
+  if(!name)return msg('// runner tag requis','err')
+  msg('// création...','ok')
+  const {data,error}=await sb.auth.signUp({email:document.getElementById('rE').value,password:document.getElementById('rP').value})
+  if(error)return msg(error.message,'err')
+  ME=data.user;MYNAME=name
+  await sb.from('profiles').upsert({id:ME.id,username:name})
+  msg('// runner créé !','ok'); setTimeout(boot,800)
+}
+async function loadName(){
+  const {data}=await sb.from('profiles').select('username').eq('id',ME.id).single()
+  MYNAME=data?.username||ME.email.split('@')[0]
+}
+async function doOut(){
+  if(CHAN){CHAN.send({type:'broadcast',event:'leave',payload:{id:ME.id,name:MYNAME}});CHAN.unsubscribe()}
+  await sb.auth.signOut();location.reload()
+}
+
+// ══════════════════════════════════════════
+//  ENGINE 3D
+// ══════════════════════════════════════════
+let renderer,scene,cam,clock
+let PLAYER,PVEL=new THREE.Vector3()
+let KEYS={},YAW=0,PITCH=0,LOCKED=false
+let CREDITS=0,XP=0
+let OTHERS={},CHAN=null
+let PARTS=[],BUILD_LIGHTS=[]
+let lastSend=0,fC=0,fT=0,T=0
+let onGround=false,platforms=[],collectibles=[],buildings=[]
+const G=-22,JUMP=10,SPD=9,SPRINT_SPD=18
+
+// ══════════════════════════════════════════
+//  🕹️ JOYSTICKS TACTILES
+// ══════════════════════════════════════════
+const joy={
+  left:{active:false,id:null,startX:0,startY:0,dx:0,dy:0},
+  right:{active:false,id:null,startX:0,startY:0,dx:0,dy:0}
+}
+let touchSprinting=false,touchJumping=false
+
+function initTouchControls(){
+  if(!IS_TOUCH)return
+  document.getElementById('touchControls').style.display='block'
+  document.getElementById('lockHint').textContent='📱 Joysticks tactiles activés'
+
+  const jL=document.getElementById('joyLeft')
+  const jR=document.getElementById('joyRight')
+  const knobL=document.getElementById('joyLKnob')
+  const knobR=document.getElementById('joyRKnob')
+  const MAX=44 // rayon max du joystick
+
+  function onTouchStart(e){
+    e.preventDefault()
+    for(const t of e.changedTouches){
+      const r=jL.getBoundingClientRect()
+      const rR=jR.getBoundingClientRect()
+      // Joystick gauche
+      if(t.clientX>=r.left-20&&t.clientX<=r.right+20&&t.clientY>=r.top-20&&t.clientY<=r.bottom+20){
+        joy.left.active=true;joy.left.id=t.identifier
+        joy.left.startX=r.left+r.width/2;joy.left.startY=r.top+r.height/2
+      }
+      // Joystick droit
+      else if(t.clientX>=rR.left-20&&t.clientX<=rR.right+20&&t.clientY>=rR.top-20&&t.clientY<=rR.bottom+20){
+        joy.right.active=true;joy.right.id=t.identifier
+        joy.right.startX=rR.left+rR.width/2;joy.right.startY=rR.top+rR.height/2
+      }
+    }
+  }
+
+  function onTouchMove(e){
+    e.preventDefault()
+    for(const t of e.changedTouches){
+      if(joy.left.active&&t.identifier===joy.left.id){
+        const dx=t.clientX-joy.left.startX, dy=t.clientY-joy.left.startY
+        const dist=Math.min(MAX,Math.sqrt(dx*dx+dy*dy))
+        const angle=Math.atan2(dy,dx)
+        joy.left.dx=(dist/MAX)*Math.cos(angle)
+        joy.left.dy=(dist/MAX)*Math.sin(angle)
+        knobL.style.transform=`translate(calc(-50% + ${joy.left.dx*MAX}px), calc(-50% + ${joy.left.dy*MAX}px))`
+      }
+      if(joy.right.active&&t.identifier===joy.right.id){
+        const dx=t.clientX-joy.right.startX, dy=t.clientY-joy.right.startY
+        const dist=Math.min(MAX,Math.sqrt(dx*dx+dy*dy))
+        const angle=Math.atan2(dy,dx)
+        joy.right.dx=(dist/MAX)*Math.cos(angle)
+        joy.right.dy=(dist/MAX)*Math.sin(angle)
+        knobR.style.transform=`translate(calc(-50% + ${joy.right.dx*MAX}px), calc(-50% + ${joy.right.dy*MAX}px))`
+        // Caméra
+        YAW-=joy.right.dx*0.04
+        PITCH-=joy.right.dy*0.025
+        PITCH=Math.max(-Math.PI/2.2,Math.min(Math.PI/2.2,PITCH))
+      }
+    }
+  }
+
+  function onTouchEnd(e){
+    e.preventDefault()
+    for(const t of e.changedTouches){
+      if(joy.left.active&&t.identifier===joy.left.id){
+        joy.left.active=false;joy.left.dx=0;joy.left.dy=0
+        knobL.style.transform='translate(-50%,-50%)'
+      }
+      if(joy.right.active&&t.identifier===joy.right.id){
+        joy.right.active=false;joy.right.dx=0;joy.right.dy=0
+        knobR.style.transform='translate(-50%,-50%)'
+      }
+    }
+  }
+
+  // Écouter sur tout le document pour ne pas rater les glissements
+  document.addEventListener('touchstart',onTouchStart,{passive:false})
+  document.addEventListener('touchmove',onTouchMove,{passive:false})
+  document.addEventListener('touchend',onTouchEnd,{passive:false})
+  document.addEventListener('touchcancel',onTouchEnd,{passive:false})
+
+  // Bouton saut
+  const btnJ=document.getElementById('btnJump')
+  btnJ.addEventListener('touchstart',e=>{e.preventDefault();if(onGround){PVEL.y=JUMP;onGround=false;spawnJumpBurst()}},{passive:false})
+
+  // Bouton sprint
+  const btnS=document.getElementById('btnSprint')
+  btnS.addEventListener('touchstart',e=>{e.preventDefault();touchSprinting=true;btnS.classList.add('on')},{passive:false})
+  btnS.addEventListener('touchend',e=>{e.preventDefault();touchSprinting=false;btnS.classList.remove('on')},{passive:false})
+  btnS.addEventListener('touchcancel',e=>{touchSprinting=false;btnS.classList.remove('on')},{passive:false})
+}
+
+function openChat(){
+  document.getElementById('chatIn').focus()
+}
+
+function boot(){
+  document.getElementById('authWrap').style.display='none'
+  document.getElementById('hud').style.display='block'
+  document.getElementById('pTag').textContent=MYNAME
+  initR(); buildCity(); buildPlayer(); initPL(); initKB(); initTouchControls(); initMP()
+  loop()
+}
+
+// ─── RENDERER ───
+function initR(){
+  const cv=document.getElementById('gc')
+  renderer=new THREE.WebGLRenderer({canvas:cv,antialias:!IS_TOUCH,alpha:false,powerPreference:'high-performance'})
+  renderer.setSize(innerWidth,innerHeight)
+  // Pixel ratio réduit sur mobile pour les perfs
+  renderer.setPixelRatio(IS_TOUCH?Math.min(devicePixelRatio,1.5):Math.min(devicePixelRatio,2))
+  renderer.shadowMap.enabled=!IS_TOUCH // Ombres désactivées sur mobile (perf)
+  renderer.toneMapping=THREE.ACESFilmicToneMapping
+  renderer.toneMappingExposure=1.4
+  renderer.setClearColor(0x010208)
+  scene=new THREE.Scene()
+  scene.fog=new THREE.FogExp2(0x010208,0.012)
+  cam=new THREE.PerspectiveCamera(78,innerWidth/innerHeight,0.1,500)
+  clock=new THREE.Clock()
+  window.addEventListener('resize',()=>{renderer.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()})
+}
+
+// ══════════════════════════════════════
+//  🏙️ VILLE CYBERPUNK
+// ══════════════════════════════════════
+function buildCity(){
+  // Sol
+  const floorG=new THREE.PlaneGeometry(400,400,40,40)
+  const floorM=new THREE.MeshPhongMaterial({color:0x04060f,emissive:0x010208,shininess:40})
+  const floor=new THREE.Mesh(floorG,floorM)
+  floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;scene.add(floor)
+  const grid=new THREE.GridHelper(400,80,0x00fff5,0x010a18)
+  grid.material.opacity=0.15;grid.material.transparent=true;scene.add(grid)
+
+  addBuildings();buildSky()
+
+  scene.add(new THREE.AmbientLight(0x080a20,1.2))
+  const moon=new THREE.DirectionalLight(0x2244aa,0.8)
+  moon.position.set(-30,80,20);scene.add(moon)
+}
+
+function addBuildings(){
+  const defs=[
+    [0,-20,12,12,45,0x040a18,0x00fff5,'sky'],
+    [15,-15,8,8,35,0x080418,0xff007a,'sky'],
+    [-15,-15,8,8,40,0x040a18,0x9d00ff,'sky'],
+    [28,-10,10,10,28,0x060a14,0x00fff5,'twr'],
+    [-28,-10,10,10,32,0x080410,0xff007a,'twr'],
+    [45,-5,14,10,22,0x040810,0xffee00,'blk'],
+    [60,0,10,8,30,0x060a10,0x00fff5,'twr'],
+    [50,-25,12,12,18,0x040810,0xff6a00,'blk'],
+    [-45,-5,14,10,20,0x040a14,0x9d00ff,'blk'],
+    [-60,0,10,8,28,0x060810,0x00fff5,'twr'],
+    [10,-55,10,8,36,0x040a18,0x00fff5,'sky'],
+    [-10,-55,10,8,30,0x080414,0xff007a,'twr'],
+    [0,-70,16,12,50,0x030810,0x00fff5,'sky'],
+    [10,30,10,8,32,0x040a18,0xff007a,'twr'],
+    [-10,30,10,8,28,0x080414,0x00fff5,'twr'],
+    [90,-40,18,14,55,0x030a14,0x00fff5,'sky'],
+    [-90,-40,18,14,60,0x050812,0xff007a,'sky'],
+    [0,-100,20,20,70,0x020810,0x00fff5,'sky'],
+  ]
+
+  defs.forEach(([x,z,w,d,h,col,glow,type])=>{
+    const geo=new THREE.BoxGeometry(w,h,d)
+    const mat=new THREE.MeshPhongMaterial({color:col,emissive:glow,emissiveIntensity:0.07,shininess:60})
+    const mesh=new THREE.Mesh(geo,mat)
+    mesh.position.set(x,h/2,z); mesh.userData.isBuild=true
+    scene.add(mesh);buildings.push(mesh)
+
+    // Bord toit
+    const roofMesh=new THREE.Mesh(new THREE.BoxGeometry(w+.1,0.15,d+.1),new THREE.MeshBasicMaterial({color:glow,transparent:true,opacity:0.6}))
+    roofMesh.position.set(x,h+.07,z);scene.add(roofMesh)
+
+    const rl=new THREE.PointLight(glow,1.2,18);rl.position.set(x,h+1,z);scene.add(rl)
+    BUILD_LIGHTS.push({light:rl,baseI:1.2})
+
+    if(type==='sky'){
+      const bl=new THREE.PointLight(0xff2200,3,8);bl.position.set(x,h+7,z)
+      bl.userData.blink=true;scene.add(bl)
+      BUILD_LIGHTS.push({light:bl,baseI:3,blink:true})
+    }
+
+    // Fenêtres (moins sur mobile)
+    if(!IS_TOUCH) addWindows(x,z,w,d,h,glow)
+  })
+
+  // Plateformes walkable
+  const wp=[
+    [0,8,-20,20,1,16,0x040a18,0x00fff5],
+    [20,12,-15,12,1,10,0x080414,0xff007a],
+    [-20,10,-18,10,1,10,0x060810,0x9d00ff],
+    [0,18,-30,10,1,10,0x040a14,0xffee00],
+    [12,22,-28,8,1,8,0x030810,0x00fff5],
+    [-12,20,-35,8,1,8,0x080414,0xff007a],
+    [0,28,-45,8,1,8,0x040a18,0x9d00ff],
+    [25,7,10,14,1,10,0x060810,0x00fff5],
+    [-25,9,12,14,1,10,0x040a14,0xff007a],
+    [40,5,-5,12,1,8,0x080410,0xffee00],
+    [0,14,-22,40,0.5,4,0x030810,0x00fff5],
+  ]
+  wp.forEach(([x,y,z,w,h,d,col,glow])=>{
+    const geo=new THREE.BoxGeometry(w,h,d)
+    const mat=new THREE.MeshPhongMaterial({color:col,emissive:glow,emissiveIntensity:0.22,shininess:80})
+    const mesh=new THREE.Mesh(geo,mat);mesh.position.set(x,y,z)
+    mesh.userData.isPlatform=true;scene.add(mesh);platforms.push(mesh)
+    const edges=new THREE.EdgesGeometry(geo)
+    const line=new THREE.LineSegments(edges,new THREE.LineBasicMaterial({color:glow,transparent:true,opacity:0.8}))
+    line.position.copy(mesh.position);scene.add(line)
+    const pl=new THREE.PointLight(glow,1,10);pl.position.set(x,y+1,z);scene.add(pl)
+  })
+
+  addCollectibles()
+}
+
+function addWindows(bx,bz,bw,bd,bh,glow){
+  const rows=Math.floor(bh/3),cols=Math.floor(bw/2)
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      if(Math.random()<0.35)continue
+      const wg=new THREE.PlaneGeometry(0.65,0.9)
+      const wm=new THREE.MeshBasicMaterial({color:[glow,0xffffff,0xaaddff][Math.floor(Math.random()*3)],transparent:true,opacity:0.3+Math.random()*.4})
+      const wn=new THREE.Mesh(wg,wm)
+      wn.position.set(bx+(c-(cols/2)+.5)*2,r*3+2,bz-bd/2-.05);scene.add(wn)
+    }
+  }
+}
+
+function addCollectibles(){
+  const spots=[[5,9,-20],[-5,9,-20],[12,13,-15],[-12,11,-18],[0,19,-30],[8,23,-28],[0,29,-45],[25,8,10],[-25,10,12],[40,6,-5],[0,15,-22]]
+  const cols=[0x00fff5,0xff007a,0xffee00,0x9d00ff,0xff6a00]
+  spots.forEach((pos,i)=>{
+    const col=cols[i%cols.length]
+    const geo=new THREE.OctahedronGeometry(0.35,0)
+    const mat=new THREE.MeshPhongMaterial({color:col,emissive:col,emissiveIntensity:0.9,shininess:200,transparent:true,opacity:.95})
+    const m=new THREE.Mesh(geo,mat)
+    m.position.set(pos[0],pos[1]+.8,pos[2])
+    m.userData.isCollect=true;m.userData.col=col;m.userData.val=100;m.userData.baseY=m.position.y
+    scene.add(m);collectibles.push(m)
+    const pl=new THREE.PointLight(col,2,7);pl.position.copy(m.position);m.userData.light=pl;scene.add(pl)
+    const rg=new THREE.TorusGeometry(0.5,0.04,6,24)
+    const rm=new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:0.5})
+    const ring=new THREE.Mesh(rg,rm);ring.position.copy(m.position);m.userData.ring=ring;scene.add(ring)
+  })
+}
+
+function buildSky(){
+  const sg=new THREE.BufferGeometry()
+  const pos=[],col=[]
+  for(let i=0;i<4000;i++){
+    const r=300+Math.random()*100,th=Math.random()*Math.PI*2,ph=Math.random()*Math.PI
+    pos.push(r*Math.sin(ph)*Math.cos(th),r*Math.cos(ph),r*Math.sin(ph)*Math.sin(th))
+    const c=new THREE.Color().setHSL(Math.random(),0.5,.85);col.push(c.r,c.g,c.b)
+  }
+  sg.setAttribute('position',new THREE.Float32BufferAttribute(pos,3))
+  sg.setAttribute('color',new THREE.Float32BufferAttribute(col,3))
+  scene.add(new THREE.Points(sg,new THREE.PointsMaterial({size:.5,vertexColors:true,sizeAttenuation:true})))
+}
+
+function buildPlayer(){
+  const bodyG=new THREE.BoxGeometry(0.6,1.0,.35)
+  const bodyM=new THREE.MeshPhongMaterial({color:0x080c20,emissive:0x00fff5,emissiveIntensity:0.15,shininess:120})
+  const body=new THREE.Mesh(bodyG,bodyM);body.position.y=.5
+
+  const headG=new THREE.BoxGeometry(.46,.42,.42)
+  const head=new THREE.Mesh(headG,bodyM.clone());head.position.y=1.35
+
+  const visG=new THREE.BoxGeometry(.34,.1,.05)
+  const visM=new THREE.MeshPhongMaterial({color:0x00fff5,emissive:0x00fff5,emissiveIntensity:1,transparent:true,opacity:.7,shininess:300})
+  const vis=new THREE.Mesh(visG,visM);vis.position.set(0,1.35,.22)
+
+  const legG=new THREE.BoxGeometry(.22,.6,.24)
+  const legM=new THREE.MeshPhongMaterial({color:0x060b1e,emissive:0xff007a,emissiveIntensity:.1})
+  const legL=new THREE.Mesh(legG,legM);legL.position.set(-.17,0,0)
+  const legR=new THREE.Mesh(legG,legM);legR.position.set(.17,0,0)
+
+  const bandG=new THREE.BoxGeometry(.62,.04,.36)
+  const bandM=new THREE.MeshBasicMaterial({color:0x00fff5,transparent:true,opacity:.7})
+  const band=new THREE.Mesh(bandG,bandM);band.position.y=.65
+
+  PLAYER=new THREE.Group()
+  PLAYER.add(body,head,vis,legL,legR,band)
+  const pl=new THREE.PointLight(0x00fff5,2,8);pl.position.y=1;PLAYER.add(pl)
+  PLAYER.userData.pLight=pl
+  PLAYER.userData.vis=vis
+  PLAYER.position.set(0,.01,3);scene.add(PLAYER)
+  cam.position.set(0,1.7,0);PLAYER.add(cam)
+}
+
+// ─── POINTER LOCK (desktop) ───
+function initPL(){
+  const btn=document.getElementById('lockBtn')
+  const ov=document.getElementById('lockOverlay')
+
+  if(IS_TOUCH){
+    // Sur mobile : le bouton démarre simplement le jeu, pas de pointer lock
+    btn.addEventListener('click',()=>{ov.style.display='none'})
+    // Toucher n'importe où pour commencer
+    btn.addEventListener('touchend',e=>{e.preventDefault();ov.style.display='none'})
+  } else {
+    btn.addEventListener('click',()=>document.getElementById('gc').requestPointerLock())
+    document.addEventListener('pointerlockchange',()=>{
+      LOCKED=document.pointerLockElement===document.getElementById('gc')
+      ov.style.display=LOCKED?'none':'flex'
+    })
+    document.addEventListener('mousemove',e=>{
+      if(!LOCKED)return
+      YAW-=e.movementX*.0022;PITCH-=e.movementY*.0022
+      PITCH=Math.max(-Math.PI/2.2,Math.min(Math.PI/2.2,PITCH))
+    })
+  }
+}
+
+function initKB(){
+  if(IS_TOUCH)return // Pas de clavier sur mobile
+  document.addEventListener('keydown',e=>{
+    if(document.getElementById('chatIn')===document.activeElement)return
+    KEYS[e.code]=true
+    if(e.code==='KeyT'){e.preventDefault();document.getElementById('chatIn').focus();document.exitPointerLock()}
+  })
+  document.addEventListener('keyup',e=>{KEYS[e.code]=false})
+  document.getElementById('chatIn').addEventListener('keydown',e=>{
+    if(e.code==='Enter'){sendChat();e.preventDefault()}
+    if(e.code==='Escape'){document.getElementById('chatIn').blur();document.getElementById('gc').requestPointerLock()}
+  })
+}
+
+// ══ BOUCLE ══
+let colorShift=0
+function loop(){
+  requestAnimationFrame(loop)
+  const dt=Math.min(clock.getDelta(),.05)
+  T+=dt;fC++;fT+=dt
+  if(fT>=1){document.getElementById('sv_fps').textContent=fC;fC=0;fT=0}
+  colorShift=(colorShift+dt*.3)%1
+  updatePlayer(dt);updateWorld(dt);updateCollectibles(dt);updateParticles(dt)
+  if(IS_TOUCH)updateCamMobile();updateMinimap()
+  renderer.render(scene,cam)
+}
+
+function updateCamMobile(){
+  // Sur mobile : le joystick droit met à jour YAW/PITCH en continu dans onTouchMove
+  // Ici on n'a rien à faire de plus
+}
+
+function updatePlayer(dt){
+  const fwd=new THREE.Vector3(-Math.sin(YAW),0,-Math.cos(YAW))
+  const right=new THREE.Vector3(Math.cos(YAW),0,-Math.sin(YAW))
+
+  let mx=0,mz=0
+  const sprinting=(KEYS['ShiftLeft']||KEYS['ShiftRight']||touchSprinting)
+  const spd=sprinting?SPRINT_SPD:SPD
+
+  if(IS_TOUCH){
+    // Joystick gauche → déplacement
+    if(joy.left.active){
+      mx+=fwd.x*(-joy.left.dy)+right.x*joy.left.dx
+      mz+=fwd.z*(-joy.left.dy)+right.z*joy.left.dx
+    }
+  } else {
+    if(KEYS['KeyW']||KEYS['ArrowUp']||KEYS['KeyZ']){mx+=fwd.x;mz+=fwd.z}
+    if(KEYS['KeyS']||KEYS['ArrowDown']){mx-=fwd.x;mz-=fwd.z}
+    if(KEYS['KeyA']||KEYS['ArrowLeft']||KEYS['KeyQ']){mx-=right.x;mz-=right.z}
+    if(KEYS['KeyD']||KEYS['ArrowRight']){mx+=right.x;mz+=right.z}
+    if(KEYS['Space']&&onGround){PVEL.y=JUMP;onGround=false;spawnJumpBurst()}
+  }
+
+  const len=Math.sqrt(mx*mx+mz*mz)
+  if(len>0){mx/=len;mz/=len}
+  PVEL.x=mx*spd;PVEL.z=mz*spd
+  PVEL.y+=G*dt
+
+  PLAYER.position.x+=PVEL.x*dt
+  PLAYER.position.y+=PVEL.y*dt
+  PLAYER.position.z+=PVEL.z*dt
+
+  if(PLAYER.position.y<=0){PLAYER.position.y=0;PVEL.y=0;onGround=true}
+  onGround=PLAYER.position.y<=0.01
+
+  platforms.forEach(p=>{
+    const bb=new THREE.Box3().setFromObject(p)
+    const px=PLAYER.position.x,py=PLAYER.position.y,pz=PLAYER.position.z,m=.32
+    if(px>bb.min.x-m&&px<bb.max.x+m&&pz>bb.min.z-m&&pz<bb.max.z+m){
+      if(py<=bb.max.y+.15&&py>=bb.max.y-.7&&PVEL.y<=0){PLAYER.position.y=bb.max.y;PVEL.y=0;onGround=true}
+    }
+  })
+
+  PLAYER.rotation.y=YAW;cam.rotation.x=PITCH
+  const tilt=mx*Math.cos(YAW)-mz*Math.sin(YAW)
+  PLAYER.rotation.z=PLAYER.rotation.z*.85+(-tilt*.1)*.15
+
+  const speed=Math.sqrt(PVEL.x*PVEL.x+PVEL.z*PVEL.z)
+  document.getElementById('sv_spd').textContent=speed.toFixed(1)
+
+  // Couleur visière réactive
+  if(PLAYER.userData.vis){
+    PLAYER.userData.vis.material.emissive.setHex(speed>SPRINT_SPD*.7?0xff007a:0x00fff5)
+  }
+
+  if(PLAYER.userData.pLight){
+    PLAYER.userData.pLight.color.setHSL(colorShift,1,.5)
+    PLAYER.userData.pLight.intensity=1.5+Math.sin(T*3)*.5
+  }
+
+  // Traînée
+  if((Math.abs(mx)+Math.abs(mz))>.1&&Math.random()<.35)spawnTrail(sprinting)
+
+  // Zone
+  const py=PLAYER.position.y
+  let zone=py>22?'APEX TOWER':py>14?'MIDLEVEL':py>7?'OVERPASS':'DOWNTOWN'
+  document.getElementById('zoneBadge').textContent='◈ '+zone
+
+  const now=Date.now()
+  if(now-lastSend>90&&CHAN){
+    lastSend=now
+    const p=PLAYER.position
+    CHAN.send({type:'broadcast',event:'move',payload:{id:ME.id,name:MYNAME,x:+p.x.toFixed(2),y:+p.y.toFixed(2),z:+p.z.toFixed(2),ry:+YAW.toFixed(3)}})
+  }
+}
+
+function updateWorld(dt){
+  BUILD_LIGHTS.forEach((bl,i)=>{
+    if(bl.blink)bl.light.intensity=(Math.sin(T*2+i)*.5+.5)>.5?bl.baseI:0
+    else bl.light.intensity=bl.baseI*(.85+Math.sin(T*1.5+i*.8)*.15)
+  })
+  const fogCol=new THREE.Color().setHSL(Math.sin(T*.04)*.5+.5,.7,.015)
+  scene.fog.color.copy(fogCol);renderer.setClearColor(fogCol)
+}
+
+function updateCollectibles(dt){
+  collectibles.forEach((c,idx)=>{
+    if(!c.visible)return
+    c.rotation.y+=dt*2.5;c.rotation.x+=dt*.8
+    c.position.y=c.userData.baseY+Math.sin(T*2+idx)*.3
+    if(c.userData.ring){c.userData.ring.position.copy(c.position);c.userData.ring.rotation.x+=dt*2;c.userData.ring.rotation.z+=dt*1.5}
+    if(c.userData.light)c.userData.light.position.copy(c.position)
+    if(c.position.distanceTo(PLAYER.position)<1.6){
+      CREDITS+=c.userData.val;XP+=20
+      document.getElementById('credDisplay').textContent='₿ '+CREDITS
+      document.getElementById('xpF').style.width=Math.min(100,(XP%500)/5)+'%'
+      spawnCollectBurst(c.position.clone(),c.userData.col)
+      notif(`+₿${c.userData.val} DATA CHIP !`,'gold');notif(`+20 XP`,'cyan')
+      c.visible=false
+      if(c.userData.light)c.userData.light.visible=false
+      if(c.userData.ring)c.userData.ring.visible=false
+      setTimeout(()=>{c.visible=true;if(c.userData.light)c.userData.light.visible=true;if(c.userData.ring)c.userData.ring.visible=true},22000)
+    }
+  })
+}
+
+// ══ PARTICULES ══
+function mkP(pos,vel,col,life,size=.06){
+  const geo=new THREE.SphereGeometry(size,3,3)
+  const mat=new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:1,blending:THREE.AdditiveBlending})
+  const m=new THREE.Mesh(geo,mat);m.position.copy(pos);scene.add(m)
+  PARTS.push({m,vel:vel.clone(),life:0,maxLife:life})
+}
+function spawnTrail(sprinting){
+  const col=sprinting?0xff007a:0x00fff5
+  const p=PLAYER.position.clone();p.y+=.5
+  p.x+=(Math.random()-.5)*.3;p.z+=(Math.random()-.5)*.3
+  mkP(p,new THREE.Vector3((Math.random()-.5)*.7,Math.random()*.4,(Math.random()-.5)*.7),col,.3,.04)
+}
+function spawnJumpBurst(){
+  const p=PLAYER.position.clone();p.y+=.1
+  for(let i=0;i<20;i++){
+    const angle=Math.random()*Math.PI*2,sp=3+Math.random()*5
+    mkP(p.clone(),new THREE.Vector3(Math.cos(angle)*sp,.5+Math.random()*3,Math.sin(angle)*sp),[0x00fff5,0xff007a,0xffee00,0x9d00ff][Math.floor(Math.random()*4)],.6,.07)
+  }
+}
+function spawnCollectBurst(pos,col){
+  for(let i=0;i<IS_TOUCH?20:40;i++){
+    const th=Math.random()*Math.PI*2,ph=Math.random()*Math.PI,sp=4+Math.random()*7
+    mkP(pos.clone(),new THREE.Vector3(Math.cos(ph)*Math.cos(th)*sp,Math.sin(ph)*sp,Math.cos(ph)*Math.sin(th)*sp),col,.8,.08)
+  }
+}
+function updateParticles(dt){
+  for(let i=PARTS.length-1;i>=0;i--){
+    const p=PARTS[i];p.life+=dt
+    const t=p.life/p.maxLife
+    p.m.position.addScaledVector(p.vel,dt);p.vel.y-=5*dt
+    p.m.material.opacity=(1-t)*.9;p.m.scale.setScalar(Math.max(.05,1-t*.6))
+    if(p.life>=p.maxLife){scene.remove(p.m);p.m.geometry.dispose();p.m.material.dispose();PARTS.splice(i,1)}
+  }
+}
+
+function updateMinimap(){
+  const cv=document.getElementById('mmCanvas'),sz=IS_TOUCH?90:120
+  const ctx=cv.getContext('2d');ctx.clearRect(0,0,sz,sz)
+  ctx.fillStyle='rgba(1,2,8,.6)';ctx.fillRect(0,0,sz,sz)
+  const scale=.4,cx=sz/2,cy=sz/2
+  const px=PLAYER.position.x,pz=PLAYER.position.z
+  buildings.forEach(b=>{
+    const bx=(b.position.x-px)*scale+cx,bz=(b.position.z-pz)*scale+cy
+    ctx.fillStyle='rgba(0,255,245,.05)';ctx.fillRect(bx-2,bz-2,5,5)
+  })
+  Object.values(OTHERS).forEach(o=>{
+    if(!o.mesh)return
+    const ox=(o.mesh.position.x-px)*scale+cx,oz=(o.mesh.position.z-pz)*scale+cy
+    ctx.beginPath();ctx.arc(ox,oz,4,0,Math.PI*2)
+    ctx.fillStyle='#ff007a';ctx.shadowColor='#ff007a';ctx.shadowBlur=6;ctx.fill()
+  })
+  collectibles.forEach(c=>{
+    if(!c.visible)return
+    const ox=(c.position.x-px)*scale+cx,oz=(c.position.z-pz)*scale+cy
+    ctx.beginPath();ctx.arc(ox,oz,3,0,Math.PI*2)
+    ctx.fillStyle='#ffee00';ctx.shadowColor='#ffee00';ctx.shadowBlur=5;ctx.fill()
+  })
+  ctx.shadowBlur=0;ctx.beginPath();ctx.arc(cx,cy,6,0,Math.PI*2)
+  ctx.fillStyle='#00fff5';ctx.shadowColor='#00fff5';ctx.shadowBlur=12;ctx.fill()
+  ctx.shadowBlur=0;ctx.beginPath();ctx.moveTo(cx,cy)
+  ctx.lineTo(cx+Math.sin(YAW)*14,cy-Math.cos(YAW)*14)
+  ctx.strokeStyle='rgba(0,255,245,.9)';ctx.lineWidth=2;ctx.stroke()
+}
+
+function notif(text,type='cyan'){
+  const el=document.createElement('div');el.className=`notif ${type}`;el.textContent=text
+  document.getElementById('notifs').appendChild(el)
+  setTimeout(()=>{el.style.opacity='0';el.style.transition='opacity .4s';setTimeout(()=>el.remove(),500)},2200)
+}
+
+// ══ MULTIJOUEUR ══
+function initMP(){
+  CHAN=sb.channel('neon-city-v2',{config:{broadcast:{self:false}}})
+  CHAN
+    .on('broadcast',{event:'move'},({payload})=>moveOther(payload))
+    .on('broadcast',{event:'chat'},({payload})=>addChatMsg(payload.name,payload.text))
+    .on('broadcast',{event:'leave'},({payload})=>{rmOther(payload.id);sysmsg(`◈ ${payload.name} a quitté la ville`)})
+    .subscribe(()=>{
+      sysmsg(`// Bienvenue, ${MYNAME} //`)
+      notif(`${MYNAME} connecté !`,'cyan')
+      CHAN.send({type:'broadcast',event:'move',payload:{id:ME.id,name:MYNAME,x:0,y:0,z:3,ry:0}})
+    })
+  window.addEventListener('beforeunload',()=>{if(CHAN)CHAN.send({type:'broadcast',event:'leave',payload:{id:ME.id,name:MYNAME}})})
+}
+
+function makeOtherRunner(id){
+  const hue=(id.charCodeAt(0)%12)/12
+  const c=new THREE.Color().setHSL(hue,1,.55),hex=c.getHex()
+  const bm=new THREE.MeshPhongMaterial({color:0x050a1a,emissive:hex,emissiveIntensity:.3})
+  const body=new THREE.Mesh(new THREE.BoxGeometry(.6,1,.35),bm);body.position.y=.5
+  const head=new THREE.Mesh(new THREE.BoxGeometry(.46,.42,.42),bm.clone());head.position.y=1.35
+  const g=new THREE.Group();g.add(body,head);scene.add(g)
+  const pl=new THREE.PointLight(hex,1.5,7);pl.position.y=1;g.add(pl)
+  return g
+}
+
+function moveOther(data){
+  if(!OTHERS[data.id]){
+    OTHERS[data.id]={mesh:makeOtherRunner(data.id),name:data.name}
+    updateOL();sysmsg(`✦ ${data.name} est arrivé`);notif(`${data.name} arrive !`,'pink')
+  }
+  const o=OTHERS[data.id];o.mesh.position.set(data.x,data.y,data.z);o.mesh.rotation.y=data.ry
+}
+function rmOther(id){if(OTHERS[id]){scene.remove(OTHERS[id].mesh);delete OTHERS[id];updateOL()}}
+function updateOL(){
+  const ul=document.getElementById('pList')
+  ul.innerHTML=`<li><span class="pdot" style="background:var(--c-cyan);box-shadow:0 0 8px var(--c-cyan)"></span>${MYNAME}</li>`
+  Object.values(OTHERS).forEach(o=>{
+    const hue=Math.floor((o.name.charCodeAt(0)%12)/12*360)
+    ul.innerHTML+=`<li><span class="pdot" style="background:hsl(${hue},100%,60%)"></span>${o.name}</li>`
+  })
+}
+
+function sendChat(){
+  const el=document.getElementById('chatIn');const txt=el.value.trim();if(!txt)return;el.value=''
+  addChatMsg(MYNAME,txt);if(IS_TOUCH){el.blur()} // ferme le clavier mobile
+  if(CHAN)CHAN.send({type:'broadcast',event:'chat',payload:{name:MYNAME,text:txt}})
+}
+function addChatMsg(name,text){
+  const c=document.getElementById('chatMsgs')
+  const hue=Math.abs(name.charCodeAt(0)%360),col=`hsl(${hue},100%,65%)`
+  const d=document.createElement('div');d.className='cmsg'
+  d.innerHTML=`<span class="cn" style="color:${col}">${esc(name)}</span> <span style="color:rgba(255,255,255,.7)">${esc(text)}</span>`
+  c.appendChild(d);c.scrollTop=c.scrollHeight
+}
+function sysmsg(text){
+  const c=document.getElementById('chatMsgs')
+  const d=document.createElement('div');d.className='cmsg sys';d.textContent=text
+  c.appendChild(d);c.scrollTop=c.scrollHeight
+}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+;(async()=>{
+  const {data}=await sb.auth.getSession()
+  if(data.session){ME=data.session.user;await loadName();boot()}
+})()
+</script>
+
+</body>
+</html>
