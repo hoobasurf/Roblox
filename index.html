@@ -541,13 +541,40 @@ async function doReg(){
   if(pass.length < 6) return setMsg('Mot de passe trop court (min 6)', 'err')
   setMsg('Creation du compte...', 'ok')
   try {
-    const {data, error} = await sb.auth.signUp({email, password:pass})
+    const {data, error} = await sb.auth.signUp({
+      email,
+      password: pass,
+      options: { data: { username: name } }
+    })
     if(error) return setMsg(error.message, 'err')
-    ME = data.user
-    MYNAME = name
-    await sb.from('profiles').upsert({id: ME.id, username: name})
-    setMsg('Compte cree ! Demarrage...', 'ok')
-    setTimeout(boot, 800)
+
+    // Cas 1 : confirmation email desactivee => session active directement
+    if(data.session && data.user){
+      ME = data.user
+      MYNAME = name
+      await sb.from('profiles').upsert({id: ME.id, username: name})
+      setMsg('Compte cree ! Demarrage...', 'ok')
+      setTimeout(boot, 800)
+      return
+    }
+
+    // Cas 2 : confirmation email activee => on tente une connexion directe
+    if(data.user && !data.session){
+      const {data: loginData, error: loginErr} = await sb.auth.signInWithPassword({email, password:pass})
+      if(!loginErr && loginData.user){
+        ME = loginData.user
+        MYNAME = name
+        await sb.from('profiles').upsert({id: ME.id, username: name})
+        setMsg('Compte cree ! Demarrage...', 'ok')
+        setTimeout(boot, 800)
+        return
+      }
+      return setMsg('Verifie ton email pour confirmer le compte !', 'ok')
+    }
+
+    // Cas 3 : email deja utilise
+    setMsg('Email deja utilise, essaie de te connecter.', 'err')
+
   } catch(e){
     setMsg('Erreur reseau, reessaie', 'err')
   }
