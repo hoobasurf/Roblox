@@ -223,6 +223,23 @@ pointer-events:auto;
 #chatWrap{width:200px;}
 }
 
+/* ══ CONTRÔLES TACTILES ══ */
+#touchControls{position:fixed;inset:0;pointer-events:none;z-index:20;display:none;}
+#joyLeft{position:absolute;bottom:calc(30px + env(safe-area-inset-bottom,0px));left:30px;width:120px;height:120px;pointer-events:auto;}
+#joyRight{position:absolute;bottom:calc(30px + env(safe-area-inset-bottom,0px));right:30px;width:120px;height:120px;pointer-events:auto;}
+.joy-base{position:absolute;inset:0;border-radius:50%;background:rgba(0,255,245,.06);border:2px solid rgba(0,255,245,.2);backdrop-filter:blur(4px);}
+.joy-knob{position:absolute;width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(0,255,245,.4),rgba(0,255,245,.15));border:2px solid rgba(0,255,245,.6);top:50%;left:50%;transform:translate(-50%,-50%);box-shadow:0 0 20px rgba(0,255,245,.3);pointer-events:none;}
+.joy-label{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-family:‘Share Tech Mono’,monospace;font-size:8px;letter-spacing:2px;color:rgba(0,255,245,.3);white-space:nowrap;}
+#joyRight .joy-knob{background:radial-gradient(circle at 35% 35%,rgba(255,0,122,.4),rgba(255,0,122,.15));border-color:rgba(255,0,122,.6);box-shadow:0 0 20px rgba(255,0,122,.3);}
+#joyRight .joy-base{border-color:rgba(255,0,122,.2);background:rgba(255,0,122,.05);}
+#btnJump{position:absolute;bottom:calc(150px + env(safe-area-inset-bottom,0px));right:40px;width:70px;height:70px;border-radius:50%;background:rgba(0,255,245,.1);border:2px solid rgba(0,255,245,.4);color:var(–c-cyan);font-family:‘Syncopate’,sans-serif;font-size:8px;letter-spacing:1px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;pointer-events:auto;cursor:pointer;box-shadow:0 0 20px rgba(0,255,245,.15);-webkit-appearance:none;}
+#btnJump:active{background:rgba(0,255,245,.25);transform:scale(.95);}
+#btnJump span{font-size:18px;}
+#btnSprint{position:absolute;bottom:calc(150px + env(safe-area-inset-bottom,0px));left:40px;width:70px;height:70px;border-radius:50%;background:rgba(255,0,122,.08);border:2px solid rgba(255,0,122,.3);color:var(–c-pink);font-family:‘Syncopate’,sans-serif;font-size:7px;letter-spacing:1px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;pointer-events:auto;cursor:pointer;box-shadow:0 0 20px rgba(255,0,122,.1);-webkit-appearance:none;}
+#btnSprint:active,#btnSprint.on{background:rgba(255,0,122,.2);}
+#btnSprint span{font-size:18px;}
+@media (pointer:fine){#touchControls{display:none !important;}}
+
 /* Lock overlay */
 #lockOverlay{
 position:fixed;inset:0;z-index:50;
@@ -349,6 +366,23 @@ pointer-events:auto;
   </div>
 </div>
 
+<!-- ══ CONTRÔLES TACTILES ══ -->
+
+<div id="touchControls">
+  <div id="joyLeft">
+    <div class="joy-base"></div>
+    <div class="joy-knob" id="joyLKnob"></div>
+    <div class="joy-label">BOUGER</div>
+  </div>
+  <div id="joyRight">
+    <div class="joy-base"></div>
+    <div class="joy-knob" id="joyRKnob"></div>
+    <div class="joy-label">CAMÉRA</div>
+  </div>
+  <button id="btnJump" type="button"><span>⬆</span>SAUT</button>
+  <button id="btnSprint" type="button"><span>⚡</span>SPRINT</button>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -425,7 +459,7 @@ function boot(){
   document.getElementById('authWrap').style.display='none'
   document.getElementById('hud').style.display='block'
   document.getElementById('pTag').textContent=MYNAME
-  initR(); buildCity(); buildPlayer(); initKB(); initMP()
+  initR(); buildCity(); buildPlayer(); initKB(); initTouch(); initMP()
   loop()
 }
 
@@ -622,6 +656,66 @@ function initKB(){
   })
 }
 
+// ══ JOYSTICKS ══
+const joy={left:{active:false,id:null,startX:0,startY:0,dx:0,dy:0},right:{active:false,id:null,startX:0,startY:0,dx:0,dy:0}}
+let touchSprinting=false
+
+function initTouch(){
+  if(!IS_TOUCH)return
+  const tc=document.getElementById('touchControls')
+  tc.style.display='block'
+  const jL=document.getElementById('joyLeft'),jR=document.getElementById('joyRight')
+  const knobL=document.getElementById('joyLKnob'),knobR=document.getElementById('joyRKnob')
+  const MAX=44
+
+  document.addEventListener('touchstart',e=>{
+    for(const t of e.changedTouches){
+      const rL=jL.getBoundingClientRect(),rR=jR.getBoundingClientRect()
+      if(t.clientX>=rL.left-20&&t.clientX<=rL.right+20&&t.clientY>=rL.top-20&&t.clientY<=rL.bottom+20){
+        joy.left.active=true;joy.left.id=t.identifier
+        joy.left.startX=rL.left+rL.width/2;joy.left.startY=rL.top+rL.height/2
+      } else if(t.clientX>=rR.left-20&&t.clientX<=rR.right+20&&t.clientY>=rR.top-20&&t.clientY<=rR.bottom+20){
+        joy.right.active=true;joy.right.id=t.identifier
+        joy.right.startX=rR.left+rR.width/2;joy.right.startY=rR.top+rR.height/2
+      }
+    }
+  },{passive:true})
+
+  document.addEventListener('touchmove',e=>{
+    for(const t of e.changedTouches){
+      if(joy.left.active&&t.identifier===joy.left.id){
+        const dx=t.clientX-joy.left.startX,dy=t.clientY-joy.left.startY
+        const dist=Math.min(MAX,Math.sqrt(dx*dx+dy*dy)),angle=Math.atan2(dy,dx)
+        joy.left.dx=(dist/MAX)*Math.cos(angle);joy.left.dy=(dist/MAX)*Math.sin(angle)
+        knobL.style.transform=`translate(calc(-50% + ${joy.left.dx*MAX}px),calc(-50% + ${joy.left.dy*MAX}px))`
+      }
+      if(joy.right.active&&t.identifier===joy.right.id){
+        const dx=t.clientX-joy.right.startX,dy=t.clientY-joy.right.startY
+        const dist=Math.min(MAX,Math.sqrt(dx*dx+dy*dy)),angle=Math.atan2(dy,dx)
+        joy.right.dx=(dist/MAX)*Math.cos(angle);joy.right.dy=(dist/MAX)*Math.sin(angle)
+        knobR.style.transform=`translate(calc(-50% + ${joy.right.dx*MAX}px),calc(-50% + ${joy.right.dy*MAX}px))`
+        YAW-=joy.right.dx*0.04;PITCH-=joy.right.dy*0.025
+        PITCH=Math.max(-Math.PI/2.2,Math.min(Math.PI/2.2,PITCH))
+      }
+    }
+  },{passive:true})
+
+  document.addEventListener('touchend',e=>{
+    for(const t of e.changedTouches){
+      if(joy.left.active&&t.identifier===joy.left.id){joy.left.active=false;joy.left.dx=0;joy.left.dy=0;knobL.style.transform='translate(-50%,-50%)'}
+      if(joy.right.active&&t.identifier===joy.right.id){joy.right.active=false;joy.right.dx=0;joy.right.dy=0;knobR.style.transform='translate(-50%,-50%)'}
+    }
+  },{passive:true})
+
+  const btnJ=document.getElementById('btnJump')
+  btnJ.addEventListener('touchstart',e=>{e.stopPropagation();if(onGround){PVEL.y=JUMP;onGround=false;spawnJumpBurst()}},{passive:true})
+
+  const btnS=document.getElementById('btnSprint')
+  btnS.addEventListener('touchstart',e=>{e.stopPropagation();touchSprinting=true;btnS.classList.add('on')},{passive:true})
+  btnS.addEventListener('touchend',()=>{touchSprinting=false;btnS.classList.remove('on')})
+  btnS.addEventListener('touchcancel',()=>{touchSprinting=false;btnS.classList.remove('on')})
+}
+
 // ══ BOUCLE ══
 let colorShift=0
 function loop(){
@@ -639,10 +733,15 @@ function updatePlayer(dt){
   const fwd=new THREE.Vector3(-Math.sin(YAW),0,-Math.cos(YAW))
   const right=new THREE.Vector3(Math.cos(YAW),0,-Math.sin(YAW))
   let mx=0,mz=0
-  const sprinting=(KEYS['ShiftLeft']||KEYS['ShiftRight'])
+  const sprinting=(KEYS['ShiftLeft']||KEYS['ShiftRight']||touchSprinting)
   const spd=sprinting?SPRINT_SPD:SPD
 
-  if(!IS_TOUCH){
+  if(IS_TOUCH){
+    if(joy.left.active){
+      mx+=fwd.x*(-joy.left.dy)+right.x*joy.left.dx
+      mz+=fwd.z*(-joy.left.dy)+right.z*joy.left.dx
+    }
+  } else {
     if(KEYS['KeyW']||KEYS['ArrowUp']||KEYS['KeyZ']){mx+=fwd.x;mz+=fwd.z}
     if(KEYS['KeyS']||KEYS['ArrowDown']){mx-=fwd.x;mz-=fwd.z}
     if(KEYS['KeyA']||KEYS['ArrowLeft']||KEYS['KeyQ']){mx-=right.x;mz-=right.z}
