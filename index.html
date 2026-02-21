@@ -26,133 +26,56 @@
 html{width:100%;min-height:100%;background:#02030a !important;}
 body{width:100%;height:100%;min-height:100%;overflow:hidden;background:#02030a !important;font-family:‘Rajdhani’,sans-serif;touch-action:none;}
 
-/* Cacher le curseur sur desktop */
 @media (pointer:fine){body{cursor:none;}}
 
-/* ══ CURSEUR (desktop seulement) ══ */
-#cur{
-position:fixed;z-index:9999;pointer-events:none;
-width:28px;height:28px;transform:translate(-50%,-50%);
-}
+#cur{position:fixed;z-index:9999;pointer-events:none;width:28px;height:28px;transform:translate(-50%,-50%);}
 #cur .ring{position:absolute;inset:0;border:1.5px solid var(–c-cyan);border-radius:50%;animation:curRing 1.8s ease-in-out infinite;}
 #cur .dot{position:absolute;top:50%;left:50%;width:5px;height:5px;background:var(–c-cyan);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 8px var(–c-cyan);}
 @keyframes curRing{0%,100%{transform:scale(1);opacity:.8;}50%{transform:scale(1.5);opacity:.3;}}
 @media (pointer:coarse){#cur{display:none;}}
 
-/* scanlines */
-#glitchBg{
-position:fixed;inset:0;z-index:0;pointer-events:none;
-background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,245,.012) 2px,rgba(0,255,245,.012) 4px);
-}
-
+#glitchBg{position:fixed;inset:0;z-index:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,245,.012) 2px,rgba(0,255,245,.012) 4px);}
 #gc{position:fixed;inset:0;display:block;}
 
-/* ══════════════════════════════════════
-AUTH
-══════════════════════════════════════ */
-#authWrap{
-position:fixed;inset:0;z-index:200;
-display:flex;align-items:center;justify-content:center;
-background:#02030a !important;padding:16px;
-}
+/* ══ AUTH ══ */
+#authWrap{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:#02030a !important;padding:16px;}
 #authBg{position:absolute;inset:0;overflow:hidden;background:#02030a;}
-.bg-grid{
-position:absolute;inset:0;
-background-image:linear-gradient(rgba(0,255,245,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,245,.04) 1px,transparent 1px);
-background-size:40px 40px;animation:gridMove 20s linear infinite;
-}
+.bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,245,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,245,.04) 1px,transparent 1px);background-size:40px 40px;animation:gridMove 20s linear infinite;}
 @keyframes gridMove{0%{background-position:0 0;}100%{background-position:40px 40px;}}
 .speed-line{position:absolute;height:1px;background:linear-gradient(90deg,transparent,var(–c-cyan),transparent);opacity:0;animation:speedLine 3s ease-in-out infinite;}
 @keyframes speedLine{0%{opacity:0;left:-10%;}30%{opacity:.6;}100%{opacity:0;left:110%;}}
 
-#authCard{
-position:relative;width:100%;max-width:430px;
-background:linear-gradient(145deg,rgba(2,8,25,.95),rgba(5,2,20,.95));
-border:1px solid rgba(0,255,245,.15);border-radius:8px;
-padding:clamp(28px,5vw,48px) clamp(20px,5vw,40px);
-backdrop-filter:blur(30px);
-box-shadow:0 0 60px rgba(0,255,245,.06),0 0 120px rgba(157,0,255,.05),inset 0 1px 0 rgba(255,255,255,.04);
-}
+#authCard{position:relative;width:100%;max-width:430px;background:linear-gradient(145deg,rgba(2,8,25,.95),rgba(5,2,20,.95));border:1px solid rgba(0,255,245,.15);border-radius:8px;padding:clamp(28px,5vw,48px) clamp(20px,5vw,40px);backdrop-filter:blur(30px);box-shadow:0 0 60px rgba(0,255,245,.06),0 0 120px rgba(157,0,255,.05),inset 0 1px 0 rgba(255,255,255,.04);}
 .corner{position:absolute;width:14px;height:14px;border-color:var(–c-cyan);border-style:solid;opacity:.6;}
 .corner.tl{top:10px;left:10px;border-width:2px 0 0 2px;}
 .corner.tr{top:10px;right:10px;border-width:2px 2px 0 0;}
 .corner.bl{bottom:10px;left:10px;border-width:0 0 2px 2px;}
 .corner.br{bottom:10px;right:10px;border-width:0 2px 2px 0;}
 
-.auth-logo{
-text-align:center;
-font-family:‘Syncopate’,sans-serif;
-font-size:clamp(36px,10vw,54px);
-font-weight:700;
-letter-spacing:10px;
-margin-bottom:8px;
-line-height:1.1;
-color:var(–c-cyan);
-text-shadow:
-0 0 10px var(–c-cyan),
-0 0 30px var(–c-cyan),
-0 0 60px rgba(0,255,245,.5),
-0 0 100px rgba(0,255,245,.3);
-animation:logoGlow 2s ease-in-out infinite;
-}
+.auth-logo{text-align:center;font-family:‘Syncopate’,sans-serif;font-size:clamp(36px,10vw,54px);font-weight:700;letter-spacing:10px;margin-bottom:8px;line-height:1.1;color:var(–c-cyan);text-shadow:0 0 10px var(–c-cyan),0 0 30px var(–c-cyan),0 0 60px rgba(0,255,245,.5),0 0 100px rgba(0,255,245,.3);animation:logoGlow 2s ease-in-out infinite;}
 @keyframes logoGlow{
-0%,100%{
-color:#00fff5;
-text-shadow:0 0 10px #00fff5,0 0 30px #00fff5,0 0 60px rgba(0,255,245,.5),0 0 100px rgba(0,255,245,.3);
+0%,100%{color:#00fff5;text-shadow:0 0 10px #00fff5,0 0 30px #00fff5,0 0 60px rgba(0,255,245,.5),0 0 100px rgba(0,255,245,.3);}
+33%{color:#ff007a;text-shadow:0 0 10px #ff007a,0 0 30px #ff007a,0 0 60px rgba(255,0,122,.5),0 0 100px rgba(255,0,122,.3);}
+66%{color:#ffee00;text-shadow:0 0 10px #ffee00,0 0 30px #ffee00,0 0 60px rgba(255,238,0,.5),0 0 100px rgba(255,238,0,.3);}
 }
-33%{
-color:#ff007a;
-text-shadow:0 0 10px #ff007a,0 0 30px #ff007a,0 0 60px rgba(255,0,122,.5),0 0 100px rgba(255,0,122,.3);
-}
-66%{
-color:#ffee00;
-text-shadow:0 0 10px #ffee00,0 0 30px #ffee00,0 0 60px rgba(255,238,0,.5),0 0 100px rgba(255,238,0,.3);
-}
-}
-@keyframes logoPulse{
-0%,100%{filter:drop-shadow(0 0 18px rgba(0,255,245,.5)) drop-shadow(0 0 40px rgba(255,0,122,.25));}
-50%{filter:drop-shadow(0 0 35px rgba(0,255,245,.9)) drop-shadow(0 0 70px rgba(255,0,122,.5)) drop-shadow(0 0 100px rgba(157,0,255,.3));}
-}
-@keyframes chromaShift{0%{background-position:0%;}100%{background-position:300%;}}
 .auth-sub{text-align:center;font-family:‘Share Tech Mono’,monospace;font-size:9px;letter-spacing:5px;color:rgba(0,255,245,.4);text-transform:uppercase;margin-bottom:28px;text-shadow:0 0 10px rgba(0,255,245,.3);}
-
 .tabs{display:flex;margin-bottom:24px;gap:2px;}
 .tab{flex:1;padding:10px;text-align:center;cursor:pointer;font-family:‘Syncopate’,sans-serif;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,.3);background:rgba(0,255,245,.03);border:1px solid rgba(0,255,245,.08);border-radius:3px;transition:all .2s;}
 .tab.on{color:var(–c-cyan);background:rgba(0,255,245,.08);border-color:rgba(0,255,245,.3);}
-
 .field{margin-bottom:16px;}
 .field label{display:block;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(0,255,245,.4);margin-bottom:7px;font-family:‘Share Tech Mono’,monospace;}
 .field input{width:100%;padding:12px 15px;background:rgba(0,255,245,.04);border:1px solid rgba(0,255,245,.12);border-radius:4px;color:#fff;font-family:‘Share Tech Mono’,monospace;font-size:14px;outline:none;transition:all .2s;-webkit-appearance:none;}
 .field input:focus{border-color:var(–c-cyan);box-shadow:0 0 20px rgba(0,255,245,.12);}
-
-.btn-neon{
-width:100%;padding:14px;margin-top:4px;background:transparent;
-border:1px solid var(–c-cyan);color:var(–c-cyan);cursor:pointer;border-radius:4px;
-font-family:‘Syncopate’,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;
-position:relative;overflow:hidden;transition:all .25s;
--webkit-appearance:none;min-height:48px;
-}
+.btn-neon{width:100%;padding:14px;margin-top:4px;background:transparent;border:1px solid var(–c-cyan);color:var(–c-cyan);cursor:pointer;border-radius:4px;font-family:‘Syncopate’,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;position:relative;overflow:hidden;transition:all .25s;-webkit-appearance:none;min-height:48px;}
 .btn-neon:hover,.btn-neon:active{background:rgba(0,255,245,.1);box-shadow:0 0 30px rgba(0,255,245,.25);}
-
 #authMsg{text-align:center;margin-top:14px;font-size:12px;min-height:18px;letter-spacing:1px;font-family:‘Share Tech Mono’,monospace;}
 #authMsg.err{color:var(–c-pink);}
 #authMsg.ok{color:var(–c-cyan);}
 
-/* ══════════════════════════════════════
-HUD
-══════════════════════════════════════ */
+/* ══ HUD ══ */
 #hud{position:fixed;inset:0;pointer-events:none;display:none;z-index:10;}
-
-/* Topbar — plus compact sur mobile */
-#topbar{
-position:absolute;top:0;left:0;right:0;
-padding:8px 12px;
-display:flex;align-items:center;gap:10px;flex-wrap:wrap;
-background:linear-gradient(180deg,rgba(2,3,10,.95),transparent);
-pointer-events:auto;
-}
+#topbar{position:absolute;top:0;left:0;right:0;padding:8px 12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:linear-gradient(180deg,rgba(2,3,10,.95),transparent);pointer-events:auto;}
 .hud-logo{font-family:‘Syncopate’,sans-serif;font-size:11px;letter-spacing:4px;color:var(–c-cyan);text-shadow:0 0 8px var(–c-cyan);flex-shrink:0;}
-
 .stat-group{display:flex;flex-direction:column;gap:3px;width:110px;}
 .stat-row{display:flex;align-items:center;gap:5px;}
 .stat-ico{font-size:9px;width:12px;text-align:center;}
@@ -162,21 +85,17 @@ pointer-events:auto;
 #hpF{background:linear-gradient(90deg,#ff0055,#ff4488);}
 #enF{background:linear-gradient(90deg,var(–c-purple),var(–c-cyan));}
 #xpF{background:linear-gradient(90deg,var(–c-yellow),var(–c-orange));}
-
 #pInfo{margin-left:auto;display:flex;align-items:center;gap:10px;flex-shrink:0;}
 #pTag{font-family:‘Share Tech Mono’,monospace;font-size:10px;color:var(–c-cyan);letter-spacing:1px;}
 #credDisplay{font-family:‘Syncopate’,sans-serif;font-size:10px;color:var(–c-yellow);}
 .hud-btn{padding:5px 10px;background:rgba(0,255,245,.06);border:1px solid rgba(0,255,245,.15);color:rgba(255,255,255,.5);border-radius:3px;cursor:pointer;font-family:‘Share Tech Mono’,monospace;font-size:10px;pointer-events:auto;min-height:36px;}
 
-/* Zone badge */
 #zoneBadge{position:absolute;top:56px;left:50%;transform:translateX(-50%);background:rgba(2,5,18,.8);border:1px solid rgba(0,255,245,.15);border-radius:20px;padding:4px 14px;font-family:‘Syncopate’,sans-serif;font-size:8px;letter-spacing:3px;color:var(–c-cyan);text-transform:uppercase;backdrop-filter:blur(10px);pointer-events:none;white-space:nowrap;}
 
-/* Minimap — petit sur mobile */
 #minimap{position:absolute;top:80px;right:10px;width:120px;height:120px;background:rgba(2,5,18,.85);border:1px solid rgba(0,255,245,.1);border-radius:8px;overflow:hidden;}
 #mmCanvas{width:100%;height:100%;}
 .mm-label{position:absolute;bottom:5px;left:0;right:0;text-align:center;font-family:‘Share Tech Mono’,monospace;font-size:7px;letter-spacing:1px;color:rgba(0,255,245,.35);pointer-events:none;}
 
-/* Joueurs en ligne — caché sur petit écran */
 #onlineWrap{position:absolute;top:80px;left:10px;width:150px;background:rgba(2,5,18,.85);border:1px solid rgba(0,255,245,.08);border-radius:8px;padding:12px;backdrop-filter:blur(10px);}
 #onlineWrap h3{font-family:‘Syncopate’,sans-serif;font-size:7px;letter-spacing:2px;color:var(–c-cyan);margin-bottom:10px;}
 #pList{list-style:none;display:flex;flex-direction:column;gap:6px;}
@@ -184,7 +103,6 @@ pointer-events:auto;
 .pdot{width:6px;height:6px;border-radius:50%;flex-shrink:0;animation:pdotPulse 2s infinite;}
 @keyframes pdotPulse{0%,100%{opacity:1;}50%{opacity:.3;}}
 
-/* Notifs */
 #notifs{position:absolute;top:80px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;gap:6px;align-items:center;z-index:50;pointer-events:none;width:90%;max-width:340px;}
 .notif{padding:7px 18px;border-radius:30px;font-family:‘Syncopate’,sans-serif;font-size:8px;letter-spacing:2px;animation:notifIn .3s ease both;backdrop-filter:blur(12px);white-space:nowrap;text-align:center;}
 @keyframes notifIn{from{opacity:0;transform:translateY(-12px) scale(.9);}to{opacity:1;transform:translateY(0) scale(1);}}
@@ -192,13 +110,24 @@ pointer-events:auto;
 .notif.pink{background:rgba(255,0,122,.12);border:1px solid rgba(255,0,122,.3);color:var(–c-pink);}
 .notif.gold{background:rgba(255,238,0,.12);border:1px solid rgba(255,238,0,.3);color:var(–c-yellow);}
 
-/* Stats */
 #statsWrap{position:absolute;bottom:220px;right:10px;display:flex;flex-direction:column;gap:5px;align-items:flex-end;}
 .spill{background:rgba(2,5,18,.85);border:1px solid rgba(0,255,245,.09);border-radius:6px;padding:4px 10px;font-family:‘Share Tech Mono’,monospace;font-size:9px;letter-spacing:1px;display:flex;gap:6px;align-items:center;}
 .spill .sv{color:var(–c-cyan);}
 
-/* Chat (compact) */
-#chatWrap{position:absolute;bottom:10px;left:10px;width:240px;background:rgba(2,5,18,.88);border:1px solid rgba(0,255,245,.08);border-radius:8px;overflow:hidden;backdrop-filter:blur(15px);pointer-events:auto;}
+/* ── CHAT ── */
+#chatWrap{
+position:absolute;
+bottom:10px;
+left:10px;
+width:240px;
+background:rgba(2,5,18,.88);
+border:1px solid rgba(0,255,245,.08);
+border-radius:8px;
+overflow:hidden;
+backdrop-filter:blur(15px);
+pointer-events:auto;
+z-index:30;
+}
 #chatMsgs{height:100px;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:4px;}
 #chatMsgs::-webkit-scrollbar{width:2px;}
 #chatMsgs::-webkit-scrollbar-thumb{background:rgba(0,255,245,.2);}
@@ -209,157 +138,122 @@ pointer-events:auto;
 #chatIn{flex:1;padding:7px 10px;background:transparent;border:none;color:#fff;font-family:‘Share Tech Mono’,monospace;font-size:12px;outline:none;}
 #chatSnd{padding:7px 12px;background:rgba(0,255,245,.06);border:none;color:var(–c-cyan);cursor:pointer;font-size:12px;pointer-events:auto;min-width:36px;min-height:36px;}
 
-/* ══════════════════════════════════════
-🕹️ CONTRÔLES TACTILES
-══════════════════════════════════════ */
+/* ══ CONTRÔLES TACTILES ══ */
 #touchControls{
-position:fixed;inset:0;pointer-events:none;z-index:20;
-display:none;
-visibility:hidden;
-opacity:0;
+position:fixed;
+inset:0;
+pointer-events:none;
+z-index:20;
+display:none; /* caché par défaut, activé par JS */
 }
 
-/* Joystick GAUCHE (mouvement) */
 #joyLeft{
 position:absolute;
-bottom:30px;left:30px;
+bottom:calc(30px + env(safe-area-inset-bottom, 0px));
+left:30px;
 width:120px;height:120px;
 pointer-events:auto;
 }
-.joy-base{
-position:absolute;inset:0;border-radius:50%;
-background:rgba(0,255,245,.06);
-border:2px solid rgba(0,255,245,.2);
-backdrop-filter:blur(4px);
-}
-.joy-knob{
-position:absolute;
-width:48px;height:48px;border-radius:50%;
-background:radial-gradient(circle at 35% 35%,rgba(0,255,245,.4),rgba(0,255,245,.15));
-border:2px solid rgba(0,255,245,.6);
-top:50%;left:50%;transform:translate(-50%,-50%);
-box-shadow:0 0 20px rgba(0,255,245,.3);
-transition:box-shadow .1s;
-pointer-events:none;
-}
-.joy-label{
-position:absolute;top:-22px;left:50%;transform:translateX(-50%);
-font-family:‘Share Tech Mono’,monospace;font-size:8px;letter-spacing:2px;
-color:rgba(0,255,245,.3);text-transform:uppercase;white-space:nowrap;
-}
+.joy-base{position:absolute;inset:0;border-radius:50%;background:rgba(0,255,245,.06);border:2px solid rgba(0,255,245,.2);backdrop-filter:blur(4px);}
+.joy-knob{position:absolute;width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(0,255,245,.4),rgba(0,255,245,.15));border:2px solid rgba(0,255,245,.6);top:50%;left:50%;transform:translate(-50%,-50%);box-shadow:0 0 20px rgba(0,255,245,.3);transition:box-shadow .1s;pointer-events:none;}
+.joy-label{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-family:‘Share Tech Mono’,monospace;font-size:8px;letter-spacing:2px;color:rgba(0,255,245,.3);text-transform:uppercase;white-space:nowrap;}
 
-/* Joystick DROIT (caméra) */
 #joyRight{
 position:absolute;
-bottom:30px;right:30px;
+bottom:calc(30px + env(safe-area-inset-bottom, 0px));
+right:30px;
 width:120px;height:120px;
 pointer-events:auto;
 }
-#joyRight .joy-knob{
-background:radial-gradient(circle at 35% 35%,rgba(255,0,122,.4),rgba(255,0,122,.15));
-border-color:rgba(255,0,122,.6);
-box-shadow:0 0 20px rgba(255,0,122,.3);
-}
-#joyRight .joy-base{
-border-color:rgba(255,0,122,.2);
-background:rgba(255,0,122,.05);
-}
+#joyRight .joy-knob{background:radial-gradient(circle at 35% 35%,rgba(255,0,122,.4),rgba(255,0,122,.15));border-color:rgba(255,0,122,.6);box-shadow:0 0 20px rgba(255,0,122,.3);}
+#joyRight .joy-base{border-color:rgba(255,0,122,.2);background:rgba(255,0,122,.05);}
 
-/* Bouton SAUT */
 #btnJump{
 position:absolute;
-bottom:150px;right:40px;
+bottom:calc(150px + env(safe-area-inset-bottom, 0px));
+right:40px;
 width:70px;height:70px;border-radius:50%;
-background:rgba(0,255,245,.1);
-border:2px solid rgba(0,255,245,.4);
-color:var(–c-cyan);
-font-family:‘Syncopate’,sans-serif;font-size:8px;letter-spacing:1px;
+background:rgba(0,255,245,.1);border:2px solid rgba(0,255,245,.4);
+color:var(–c-cyan);font-family:‘Syncopate’,sans-serif;font-size:8px;letter-spacing:1px;
 display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;
 pointer-events:auto;cursor:pointer;
-box-shadow:0 0 20px rgba(0,255,245,.15);
-transition:all .1s;
--webkit-appearance:none;
+box-shadow:0 0 20px rgba(0,255,245,.15);transition:all .1s;-webkit-appearance:none;
 }
 #btnJump:active{background:rgba(0,255,245,.25);box-shadow:0 0 35px rgba(0,255,245,.4);transform:scale(.95);}
 #btnJump span{font-size:18px;}
 
-/* Bouton SPRINT */
 #btnSprint{
 position:absolute;
-bottom:150px;left:40px;
+bottom:calc(150px + env(safe-area-inset-bottom, 0px));
+left:40px;
 width:70px;height:70px;border-radius:50%;
-background:rgba(255,0,122,.08);
-border:2px solid rgba(255,0,122,.3);
-color:var(–c-pink);
-font-family:‘Syncopate’,sans-serif;font-size:7px;letter-spacing:1px;
+background:rgba(255,0,122,.08);border:2px solid rgba(255,0,122,.3);
+color:var(–c-pink);font-family:‘Syncopate’,sans-serif;font-size:7px;letter-spacing:1px;
 display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;
 pointer-events:auto;cursor:pointer;
-box-shadow:0 0 20px rgba(255,0,122,.1);
-transition:all .1s;
--webkit-appearance:none;
+box-shadow:0 0 20px rgba(255,0,122,.1);transition:all .1s;-webkit-appearance:none;
 }
 #btnSprint:active,#btnSprint.on{background:rgba(255,0,122,.2);box-shadow:0 0 35px rgba(255,0,122,.35);}
 #btnSprint span{font-size:18px;}
 
-/* Bouton CHAT */
+/* ── BOUTON CHAT mobile : au-dessus du chat, pas au milieu ── */
 #btnChat{
 position:absolute;
-bottom:240px;left:50%;transform:translateX(-50%);
-padding:8px 20px;border-radius:20px;
-background:rgba(2,5,18,.7);border:1px solid rgba(0,255,245,.2);
-color:rgba(0,255,245,.6);font-family:‘Share Tech Mono’,monospace;font-size:10px;letter-spacing:2px;
+bottom:calc(10px + env(safe-area-inset-bottom, 0px));
+left:260px; /* juste à droite du chatWrap */
+padding:10px 14px;
+border-radius:50%;
+width:44px;height:44px;
+background:rgba(2,5,18,.85);
+border:1px solid rgba(0,255,245,.25);
+color:rgba(0,255,245,.8);
+font-size:18px;
+display:flex;align-items:center;justify-content:center;
 pointer-events:auto;cursor:pointer;
 -webkit-appearance:none;
+z-index:31;
 }
 
-/* Zone sécurisée iOS */
-@supports (padding-bottom: env(safe-area-inset-bottom)){
-#joyLeft,#joyRight{bottom:calc(30px + env(safe-area-inset-bottom));}
-#btnJump,#btnSprint{bottom:calc(150px + env(safe-area-inset-bottom));}
-}
-
-/* Sur desktop : cacher les contrôles tactiles */
+/* Desktop */
 @media (pointer:fine){
 #touchControls{display:none !important;}
 #statsWrap{bottom:16px;}
 #chatWrap{width:300px;bottom:16px;}
 #chatMsgs{height:130px;}
-/* Afficher le panneau online sur desktop */
 }
 
-/* Responsive minimap */
+/* Petit mobile */
 @media (max-width:480px){
 #minimap{width:90px;height:90px;top:80px;right:8px;}
-#onlineWrap{display:none;} /* Caché sur très petit écran */
+#onlineWrap{display:none;}
 #chatWrap{width:200px;}
+#btnChat{left:215px;}
 }
 
-/* Lock overlay */
+/* ══ LOCK OVERLAY ══ */
 #lockOverlay{
 position:fixed;inset:0;z-index:50;
 display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;
-background:rgba(2,3,10,.85);backdrop-filter:blur(6px);
+background:rgba(2,3,10,.92);backdrop-filter:blur(6px);
 padding:20px;
+pointer-events:auto; /* ← IMPORTANT : capte les touches */
 }
-.lock-title{
-font-family:‘Syncopate’,sans-serif;
-font-size:clamp(42px,12vw,72px);
-font-weight:700;
-letter-spacing:10px;
-text-align:center;
-color:#00fff5;
-animation:logoGlow 2s ease-in-out infinite;
-}
+.lock-title{font-family:‘Syncopate’,sans-serif;font-size:clamp(42px,12vw,72px);font-weight:700;letter-spacing:10px;text-align:center;color:#00fff5;animation:logoGlow 2s ease-in-out infinite;}
 .lock-sub{font-family:‘Share Tech Mono’,monospace;font-size:10px;letter-spacing:4px;color:rgba(255,255,255,.3);text-align:center;text-transform:uppercase;}
 .lock-hint{font-family:‘Share Tech Mono’,monospace;font-size:9px;letter-spacing:4px;color:rgba(0,255,245,.3);text-align:center;margin-top:-14px;text-transform:uppercase;}
 .lock-btn{
 padding:16px 44px;border-radius:4px;cursor:pointer;
 font-family:‘Syncopate’,sans-serif;font-size:10px;letter-spacing:3px;
-background:transparent;border:1px solid var(–c-cyan);color:var(–c-cyan);
-transition:all .3s;min-height:52px;min-width:200px;
+background:transparent;border:2px solid var(–c-cyan);color:var(–c-cyan);
+transition:all .3s;
+min-height:60px;min-width:220px;
 -webkit-appearance:none;
+/* ← Garantit que le bouton est cliquable/touchable */
+position:relative;z-index:51;
+touch-action:manipulation;
+user-select:none;-webkit-user-select:none;
 }
-.lock-btn:hover,.lock-btn:active{background:rgba(0,255,245,.12);box-shadow:0 0 40px rgba(0,255,245,.3);}
+.lock-btn:hover,.lock-btn:active{background:rgba(0,255,245,.15);box-shadow:0 0 40px rgba(0,255,245,.4);}
 </style>
 
 </head>
@@ -408,11 +302,14 @@ transition:all .3s;min-height:52px;min-width:200px;
 <!-- ══ HUD ══ -->
 
 <div id="hud">
+
+  <!-- Lock overlay DANS le hud mais avec pointer-events:auto -->
+
   <div id="lockOverlay">
     <div class="lock-title">RYONIX</div>
     <div class="lock-sub">// Nouvelle Ère Virtuelle //</div>
     <div class="lock-hint" id="lockHint">// TOUCH READY //</div>
-    <button class="lock-btn" id="lockBtn">[ ENTRER DANS LA VILLE ]</button>
+    <button class="lock-btn" id="lockBtn" type="button">[ ENTRER DANS LA VILLE ]</button>
   </div>
 
   <div id="topbar">
@@ -457,19 +354,14 @@ transition:all .3s;min-height:52px;min-width:200px;
   </div>
 </div>
 
-<!-- ══ CONTRÔLES TACTILES ══ -->
+<!-- ══ CONTRÔLES TACTILES — hors du HUD, z-index:20 ══ -->
 
-<div id="touchControls" style="display:none!important;visibility:hidden;opacity:0;">
-
-  <!-- Joystick gauche : MOUVEMENT -->
-
+<div id="touchControls">
   <div id="joyLeft">
     <div class="joy-base"></div>
     <div class="joy-knob" id="joyLKnob"></div>
     <div class="joy-label">BOUGER</div>
   </div>
-
-  <!-- Joystick droit : CAMÉRA -->
 
   <div id="joyRight">
     <div class="joy-base"></div>
@@ -477,17 +369,9 @@ transition:all .3s;min-height:52px;min-width:200px;
     <div class="joy-label">CAMÉRA</div>
   </div>
 
-  <!-- Bouton saut -->
-
-<button id="btnJump"><span>⬆</span>SAUT</button>
-
-  <!-- Bouton sprint -->
-
-<button id="btnSprint"><span>⚡</span>SPRINT</button>
-
-  <!-- Bouton chat -->
-
-<button id="btnChat" onclick="openChat()">💬</button>
+<button id="btnJump" type="button"><span>⬆</span>SAUT</button>
+<button id="btnSprint" type="button"><span>⚡</span>SPRINT</button>
+<button id="btnChat" type="button" onclick="openChat()">💬</button>
 
 </div>
 
@@ -496,25 +380,18 @@ transition:all .3s;min-height:52px;min-width:200px;
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-// ══════════════════════════════════════════
-//  ⚙️ REMPLACE CES CLÉS SUPABASE
-// ══════════════════════════════════════════
 const SB_URL = 'https://spelbrydyfesvnhebqek.supabase.co'
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNwZWxicnlkeWZlc3ZuaGVicWVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2NjMxMDYsImV4cCI6MjA4NzIzOTEwNn0.GSrTcl0pS_QBvdsjSqD2HHGiTX0txslNGtA4PQxxbNQ'
 const sb = window.supabase.createClient(SB_URL, SB_KEY)
 
-// ─── Détection mobile ───
 const IS_TOUCH = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0)
 
-// ─── Curseur (desktop seulement) ───
 if(!IS_TOUCH){
   const cur=document.getElementById('cur')
   document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px'})
 }
 
-// ══════════════════════════════════════════
-//  AUTH
-// ══════════════════════════════════════════
+// ══ AUTH ══
 let ME=null,MYNAME=''
 
 function showT(t){
@@ -539,7 +416,7 @@ async function doReg(){
   if(error)return msg(error.message,'err')
   ME=data.user;MYNAME=name
   await sb.from('profiles').upsert({id:ME.id,username:name})
-  msg('// runner créé !','ok'); setTimeout(boot,800)
+  msg('// runner créé !','ok');setTimeout(boot,800)
 }
 async function loadName(){
   const {data}=await sb.from('profiles').select('username').eq('id',ME.id).single()
@@ -550,9 +427,7 @@ async function doOut(){
   await sb.auth.signOut();location.reload()
 }
 
-// ══════════════════════════════════════════
-//  ENGINE 3D
-// ══════════════════════════════════════════
+// ══ ENGINE 3D ══
 let renderer,scene,cam,clock
 let PLAYER,PVEL=new THREE.Vector3()
 let KEYS={},YAW=0,PITCH=0,LOCKED=false
@@ -563,42 +438,39 @@ let lastSend=0,fC=0,fT=0,T=0
 let onGround=false,platforms=[],collectibles=[],buildings=[]
 const G=-22,JUMP=10,SPD=9,SPRINT_SPD=18
 
-// ══════════════════════════════════════════
-//  🕹️ JOYSTICKS TACTILES
-// ══════════════════════════════════════════
+// ══ JOYSTICKS ══
 const joy={
   left:{active:false,id:null,startX:0,startY:0,dx:0,dy:0},
   right:{active:false,id:null,startX:0,startY:0,dx:0,dy:0}
 }
-let touchSprinting=false,touchJumping=false
+let touchSprinting=false
 
 function initTouchControls(){
   if(!IS_TOUCH)return
-  const tc=document.getElementById('touchControls');
-  tc.removeAttribute('style');
-  tc.style.display='block';
-  tc.style.visibility='visible';
-  tc.style.opacity='1'
+
+  // Afficher les contrôles (ils sont masqués jusqu'ici)
+  const tc=document.getElementById('touchControls')
+  tc.style.display='block'
+
   document.getElementById('lockHint').textContent='// TOUCH READY //'
 
   const jL=document.getElementById('joyLeft')
   const jR=document.getElementById('joyRight')
   const knobL=document.getElementById('joyLKnob')
   const knobR=document.getElementById('joyRKnob')
-  const MAX=44 // rayon max du joystick
+  const MAX=44
 
   function onTouchStart(e){
+    // Ne pas intercepter les touches sur l'overlay ou les boutons
+    if(e.target.closest('#lockOverlay'))return
     e.preventDefault()
     for(const t of e.changedTouches){
       const r=jL.getBoundingClientRect()
       const rR=jR.getBoundingClientRect()
-      // Joystick gauche
       if(t.clientX>=r.left-20&&t.clientX<=r.right+20&&t.clientY>=r.top-20&&t.clientY<=r.bottom+20){
         joy.left.active=true;joy.left.id=t.identifier
         joy.left.startX=r.left+r.width/2;joy.left.startY=r.top+r.height/2
-      }
-      // Joystick droit
-      else if(t.clientX>=rR.left-20&&t.clientX<=rR.right+20&&t.clientY>=rR.top-20&&t.clientY<=rR.bottom+20){
+      }else if(t.clientX>=rR.left-20&&t.clientX<=rR.right+20&&t.clientY>=rR.top-20&&t.clientY<=rR.bottom+20){
         joy.right.active=true;joy.right.id=t.identifier
         joy.right.startX=rR.left+rR.width/2;joy.right.startY=rR.top+rR.height/2
       }
@@ -606,32 +478,28 @@ function initTouchControls(){
   }
 
   function onTouchMove(e){
+    if(e.target.closest('#lockOverlay'))return
     e.preventDefault()
     for(const t of e.changedTouches){
       if(joy.left.active&&t.identifier===joy.left.id){
-        const dx=t.clientX-joy.left.startX, dy=t.clientY-joy.left.startY
-        const dist=Math.min(MAX,Math.sqrt(dx*dx+dy*dy))
-        const angle=Math.atan2(dy,dx)
-        joy.left.dx=(dist/MAX)*Math.cos(angle)
-        joy.left.dy=(dist/MAX)*Math.sin(angle)
+        const dx=t.clientX-joy.left.startX,dy=t.clientY-joy.left.startY
+        const dist=Math.min(MAX,Math.sqrt(dx*dx+dy*dy)),angle=Math.atan2(dy,dx)
+        joy.left.dx=(dist/MAX)*Math.cos(angle);joy.left.dy=(dist/MAX)*Math.sin(angle)
         knobL.style.transform=`translate(calc(-50% + ${joy.left.dx*MAX}px), calc(-50% + ${joy.left.dy*MAX}px))`
       }
       if(joy.right.active&&t.identifier===joy.right.id){
-        const dx=t.clientX-joy.right.startX, dy=t.clientY-joy.right.startY
-        const dist=Math.min(MAX,Math.sqrt(dx*dx+dy*dy))
-        const angle=Math.atan2(dy,dx)
-        joy.right.dx=(dist/MAX)*Math.cos(angle)
-        joy.right.dy=(dist/MAX)*Math.sin(angle)
+        const dx=t.clientX-joy.right.startX,dy=t.clientY-joy.right.startY
+        const dist=Math.min(MAX,Math.sqrt(dx*dx+dy*dy)),angle=Math.atan2(dy,dx)
+        joy.right.dx=(dist/MAX)*Math.cos(angle);joy.right.dy=(dist/MAX)*Math.sin(angle)
         knobR.style.transform=`translate(calc(-50% + ${joy.right.dx*MAX}px), calc(-50% + ${joy.right.dy*MAX}px))`
-        // Caméra
-        YAW-=joy.right.dx*0.04
-        PITCH-=joy.right.dy*0.025
+        YAW-=joy.right.dx*0.04;PITCH-=joy.right.dy*0.025
         PITCH=Math.max(-Math.PI/2.2,Math.min(Math.PI/2.2,PITCH))
       }
     }
   }
 
   function onTouchEnd(e){
+    if(e.target.closest('#lockOverlay'))return
     e.preventDefault()
     for(const t of e.changedTouches){
       if(joy.left.active&&t.identifier===joy.left.id){
@@ -645,7 +513,6 @@ function initTouchControls(){
     }
   }
 
-  // Écouter sur tout le document pour ne pas rater les glissements
   document.addEventListener('touchstart',onTouchStart,{passive:false})
   document.addEventListener('touchmove',onTouchMove,{passive:false})
   document.addEventListener('touchend',onTouchEnd,{passive:false})
@@ -653,13 +520,16 @@ function initTouchControls(){
 
   // Bouton saut
   const btnJ=document.getElementById('btnJump')
-  btnJ.addEventListener('touchstart',e=>{e.preventDefault();if(onGround){PVEL.y=JUMP;onGround=false;spawnJumpBurst()}},{passive:false})
+  btnJ.addEventListener('touchstart',e=>{
+    e.stopPropagation()
+    if(onGround){PVEL.y=JUMP;onGround=false;spawnJumpBurst()}
+  },{passive:true})
 
   // Bouton sprint
   const btnS=document.getElementById('btnSprint')
-  btnS.addEventListener('touchstart',e=>{e.preventDefault();touchSprinting=true;btnS.classList.add('on')},{passive:false})
-  btnS.addEventListener('touchend',e=>{e.preventDefault();touchSprinting=false;btnS.classList.remove('on')},{passive:false})
-  btnS.addEventListener('touchcancel',e=>{touchSprinting=false;btnS.classList.remove('on')},{passive:false})
+  btnS.addEventListener('touchstart',e=>{e.stopPropagation();touchSprinting=true;btnS.classList.add('on')},{passive:true})
+  btnS.addEventListener('touchend',e=>{touchSprinting=false;btnS.classList.remove('on')},{passive:true})
+  btnS.addEventListener('touchcancel',e=>{touchSprinting=false;btnS.classList.remove('on')},{passive:true})
 }
 
 function openChat(){
@@ -670,18 +540,16 @@ function boot(){
   document.getElementById('authWrap').style.display='none'
   document.getElementById('hud').style.display='block'
   document.getElementById('pTag').textContent=MYNAME
-  initR(); buildCity(); buildPlayer(); initPL(); initKB(); initTouchControls(); initMP()
+  initR();buildCity();buildPlayer();initPL();initKB();initTouchControls();initMP()
   loop()
 }
 
-// ─── RENDERER ───
 function initR(){
   const cv=document.getElementById('gc')
   renderer=new THREE.WebGLRenderer({canvas:cv,antialias:!IS_TOUCH,alpha:false,powerPreference:'high-performance'})
   renderer.setSize(innerWidth,innerHeight)
-  // Pixel ratio réduit sur mobile pour les perfs
   renderer.setPixelRatio(IS_TOUCH?Math.min(devicePixelRatio,1.5):Math.min(devicePixelRatio,2))
-  renderer.shadowMap.enabled=!IS_TOUCH // Ombres désactivées sur mobile (perf)
+  renderer.shadowMap.enabled=!IS_TOUCH
   renderer.toneMapping=THREE.ACESFilmicToneMapping
   renderer.toneMappingExposure=1.4
   renderer.setClearColor(0x010208)
@@ -692,20 +560,15 @@ function initR(){
   window.addEventListener('resize',()=>{renderer.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()})
 }
 
-// ══════════════════════════════════════
-//  🏙️ VILLE CYBERPUNK
-// ══════════════════════════════════════
+// ══ VILLE ══
 function buildCity(){
-  // Sol
   const floorG=new THREE.PlaneGeometry(400,400,40,40)
   const floorM=new THREE.MeshPhongMaterial({color:0x04060f,emissive:0x010208,shininess:40})
   const floor=new THREE.Mesh(floorG,floorM)
   floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;scene.add(floor)
   const grid=new THREE.GridHelper(400,80,0x00fff5,0x010a18)
   grid.material.opacity=0.15;grid.material.transparent=true;scene.add(grid)
-
   addBuildings();buildSky()
-
   scene.add(new THREE.AmbientLight(0x080a20,1.2))
   const moon=new THREE.DirectionalLight(0x2244aa,0.8)
   moon.position.set(-30,80,20);scene.add(moon)
@@ -732,32 +595,24 @@ function addBuildings(){
     [-90,-40,18,14,60,0x050812,0xff007a,'sky'],
     [0,-100,20,20,70,0x020810,0x00fff5,'sky'],
   ]
-
   defs.forEach(([x,z,w,d,h,col,glow,type])=>{
     const geo=new THREE.BoxGeometry(w,h,d)
     const mat=new THREE.MeshPhongMaterial({color:col,emissive:glow,emissiveIntensity:0.07,shininess:60})
     const mesh=new THREE.Mesh(geo,mat)
-    mesh.position.set(x,h/2,z); mesh.userData.isBuild=true
+    mesh.position.set(x,h/2,z);mesh.userData.isBuild=true
     scene.add(mesh);buildings.push(mesh)
-
-    // Bord toit
     const roofMesh=new THREE.Mesh(new THREE.BoxGeometry(w+.1,0.15,d+.1),new THREE.MeshBasicMaterial({color:glow,transparent:true,opacity:0.6}))
     roofMesh.position.set(x,h+.07,z);scene.add(roofMesh)
-
     const rl=new THREE.PointLight(glow,1.2,18);rl.position.set(x,h+1,z);scene.add(rl)
     BUILD_LIGHTS.push({light:rl,baseI:1.2})
-
     if(type==='sky'){
       const bl=new THREE.PointLight(0xff2200,3,8);bl.position.set(x,h+7,z)
       bl.userData.blink=true;scene.add(bl)
       BUILD_LIGHTS.push({light:bl,baseI:3,blink:true})
     }
-
-    // Fenêtres (moins sur mobile)
-    if(!IS_TOUCH) addWindows(x,z,w,d,h,glow)
+    if(!IS_TOUCH)addWindows(x,z,w,d,h,glow)
   })
 
-  // Plateformes walkable
   const wp=[
     [0,8,-20,20,1,16,0x040a18,0x00fff5],
     [20,12,-15,12,1,10,0x080414,0xff007a],
@@ -781,7 +636,6 @@ function addBuildings(){
     line.position.copy(mesh.position);scene.add(line)
     const pl=new THREE.PointLight(glow,1,10);pl.position.set(x,y+1,z);scene.add(pl)
   })
-
   addCollectibles()
 }
 
@@ -830,26 +684,15 @@ function buildSky(){
 }
 
 function buildPlayer(){
-  const bodyG=new THREE.BoxGeometry(0.6,1.0,.35)
   const bodyM=new THREE.MeshPhongMaterial({color:0x080c20,emissive:0x00fff5,emissiveIntensity:0.15,shininess:120})
-  const body=new THREE.Mesh(bodyG,bodyM);body.position.y=.5
-
-  const headG=new THREE.BoxGeometry(.46,.42,.42)
-  const head=new THREE.Mesh(headG,bodyM.clone());head.position.y=1.35
-
-  const visG=new THREE.BoxGeometry(.34,.1,.05)
+  const body=new THREE.Mesh(new THREE.BoxGeometry(0.6,1.0,.35),bodyM);body.position.y=.5
+  const head=new THREE.Mesh(new THREE.BoxGeometry(.46,.42,.42),bodyM.clone());head.position.y=1.35
   const visM=new THREE.MeshPhongMaterial({color:0x00fff5,emissive:0x00fff5,emissiveIntensity:1,transparent:true,opacity:.7,shininess:300})
-  const vis=new THREE.Mesh(visG,visM);vis.position.set(0,1.35,.22)
-
-  const legG=new THREE.BoxGeometry(.22,.6,.24)
+  const vis=new THREE.Mesh(new THREE.BoxGeometry(.34,.1,.05),visM);vis.position.set(0,1.35,.22)
   const legM=new THREE.MeshPhongMaterial({color:0x060b1e,emissive:0xff007a,emissiveIntensity:.1})
-  const legL=new THREE.Mesh(legG,legM);legL.position.set(-.17,0,0)
-  const legR=new THREE.Mesh(legG,legM);legR.position.set(.17,0,0)
-
-  const bandG=new THREE.BoxGeometry(.62,.04,.36)
-  const bandM=new THREE.MeshBasicMaterial({color:0x00fff5,transparent:true,opacity:.7})
-  const band=new THREE.Mesh(bandG,bandM);band.position.y=.65
-
+  const legL=new THREE.Mesh(new THREE.BoxGeometry(.22,.6,.24),legM);legL.position.set(-.17,0,0)
+  const legR=new THREE.Mesh(new THREE.BoxGeometry(.22,.6,.24),legM);legR.position.set(.17,0,0)
+  const band=new THREE.Mesh(new THREE.BoxGeometry(.62,.04,.36),new THREE.MeshBasicMaterial({color:0x00fff5,transparent:true,opacity:.7}));band.position.y=.65
   PLAYER=new THREE.Group()
   PLAYER.add(body,head,vis,legL,legR,band)
   const pl=new THREE.PointLight(0x00fff5,2,8);pl.position.y=1;PLAYER.add(pl)
@@ -859,16 +702,23 @@ function buildPlayer(){
   cam.position.set(0,1.7,0);PLAYER.add(cam)
 }
 
-// ─── POINTER LOCK (desktop) ───
+// ══ POINTER LOCK (desktop) / Bouton ville (mobile) ══
 function initPL(){
   const btn=document.getElementById('lockBtn')
   const ov=document.getElementById('lockOverlay')
 
+  function enterCity(){
+    ov.style.display='none'
+  }
+
   if(IS_TOUCH){
-    // Sur mobile : le bouton démarre simplement le jeu, pas de pointer lock
-    btn.addEventListener('click',()=>{ov.style.display='none'})
-    // Toucher n'importe où pour commencer
-    btn.addEventListener('touchend',e=>{e.preventDefault();ov.style.display='none'})
+    // FIX: utiliser click (qui fonctionne sur iOS sans e.preventDefault())
+    // + touchend avec stopPropagation seulement (pas preventDefault sur le bouton lui-même)
+    btn.addEventListener('click', enterCity)
+    btn.addEventListener('touchend', function(e){
+      e.stopPropagation()
+      enterCity()
+    })
   } else {
     btn.addEventListener('click',()=>document.getElementById('gc').requestPointerLock())
     document.addEventListener('pointerlockchange',()=>{
@@ -884,7 +734,7 @@ function initPL(){
 }
 
 function initKB(){
-  if(IS_TOUCH)return // Pas de clavier sur mobile
+  if(IS_TOUCH)return
   document.addEventListener('keydown',e=>{
     if(document.getElementById('chatIn')===document.activeElement)return
     KEYS[e.code]=true
@@ -906,25 +756,18 @@ function loop(){
   if(fT>=1){document.getElementById('sv_fps').textContent=fC;fC=0;fT=0}
   colorShift=(colorShift+dt*.3)%1
   updatePlayer(dt);updateWorld(dt);updateCollectibles(dt);updateParticles(dt)
-  if(IS_TOUCH)updateCamMobile();updateMinimap()
+  updateMinimap()
   renderer.render(scene,cam)
-}
-
-function updateCamMobile(){
-  // Sur mobile : le joystick droit met à jour YAW/PITCH en continu dans onTouchMove
-  // Ici on n'a rien à faire de plus
 }
 
 function updatePlayer(dt){
   const fwd=new THREE.Vector3(-Math.sin(YAW),0,-Math.cos(YAW))
   const right=new THREE.Vector3(Math.cos(YAW),0,-Math.sin(YAW))
-
   let mx=0,mz=0
   const sprinting=(KEYS['ShiftLeft']||KEYS['ShiftRight']||touchSprinting)
   const spd=sprinting?SPRINT_SPD:SPD
 
   if(IS_TOUCH){
-    // Joystick gauche → déplacement
     if(joy.left.active){
       mx+=fwd.x*(-joy.left.dy)+right.x*joy.left.dx
       mz+=fwd.z*(-joy.left.dy)+right.z*joy.left.dx
@@ -941,7 +784,6 @@ function updatePlayer(dt){
   if(len>0){mx/=len;mz/=len}
   PVEL.x=mx*spd;PVEL.z=mz*spd
   PVEL.y+=G*dt
-
   PLAYER.position.x+=PVEL.x*dt
   PLAYER.position.y+=PVEL.y*dt
   PLAYER.position.z+=PVEL.z*dt
@@ -964,20 +806,16 @@ function updatePlayer(dt){
   const speed=Math.sqrt(PVEL.x*PVEL.x+PVEL.z*PVEL.z)
   document.getElementById('sv_spd').textContent=speed.toFixed(1)
 
-  // Couleur visière réactive
   if(PLAYER.userData.vis){
     PLAYER.userData.vis.material.emissive.setHex(speed>SPRINT_SPD*.7?0xff007a:0x00fff5)
   }
-
   if(PLAYER.userData.pLight){
     PLAYER.userData.pLight.color.setHSL(colorShift,1,.5)
     PLAYER.userData.pLight.intensity=1.5+Math.sin(T*3)*.5
   }
 
-  // Traînée
   if((Math.abs(mx)+Math.abs(mz))>.1&&Math.random()<.35)spawnTrail(sprinting)
 
-  // Zone
   const py=PLAYER.position.y
   let zone=py>22?'APEX TOWER':py>14?'MIDLEVEL':py>7?'OVERPASS':'DOWNTOWN'
   document.getElementById('zoneBadge').textContent='◈ '+zone
@@ -1020,7 +858,6 @@ function updateCollectibles(dt){
   })
 }
 
-// ══ PARTICULES ══
 function mkP(pos,vel,col,life,size=.06){
   const geo=new THREE.SphereGeometry(size,3,3)
   const mat=new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:1,blending:THREE.AdditiveBlending})
@@ -1136,7 +973,7 @@ function updateOL(){
 
 function sendChat(){
   const el=document.getElementById('chatIn');const txt=el.value.trim();if(!txt)return;el.value=''
-  addChatMsg(MYNAME,txt);if(IS_TOUCH){el.blur()} // ferme le clavier mobile
+  addChatMsg(MYNAME,txt);if(IS_TOUCH){el.blur()}
   if(CHAN)CHAN.send({type:'broadcast',event:'chat',payload:{name:MYNAME,text:txt}})
 }
 function addChatMsg(name,text){
