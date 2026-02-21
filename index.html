@@ -578,8 +578,7 @@ function initPL(){
 
   if(IS_TOUCH){
     document.getElementById('lockHint').textContent='// TOUCH READY //'
-    btn.addEventListener('click',()=>{ov.style.display='none'})
-    btn.addEventListener('touchend',e=>{e.preventDefault();ov.style.display='none'})
+    btn.addEventListener('touchend',e=>{ov.style.display='none'})
   } else {
     btn.addEventListener('click',()=>document.getElementById('gc').requestPointerLock())
     document.addEventListener('pointerlockchange',()=>{
