@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="theme-color" content="#02030a"/>
 <style>html{background:#02030a;}</style>
-<title>NEON CITY — Cyberpunk Universe</title>
+<title>RYONIX — Cyberpunk Universe</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap');
 
@@ -80,14 +80,27 @@ box-shadow:0 0 60px rgba(0,255,245,.06),0 0 120px rgba(157,0,255,.05),inset 0 1p
 .corner.br{bottom:10px;right:10px;border-width:0 2px 2px 0;}
 
 .auth-logo{
-text-align:center;font-family:‘Syncopate’,sans-serif;font-size:clamp(22px,6vw,34px);font-weight:700;
-letter-spacing:6px;margin-bottom:4px;
+text-align:center;
+font-family:‘Syncopate’,sans-serif;
+font-size:clamp(30px,9vw,52px);
+font-weight:700;
+letter-spacing:8px;
+margin-bottom:6px;
+line-height:1.1;
 background:linear-gradient(90deg,var(–c-cyan),var(–c-pink),var(–c-yellow),var(–c-cyan));
-background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-animation:chromaShift 4s linear infinite;
+background-size:300%;
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+background-clip:text;
+animation:chromaShift 3s linear infinite, logoPulse 2.5s ease-in-out infinite;
+filter:drop-shadow(0 0 18px rgba(0,255,245,.5)) drop-shadow(0 0 40px rgba(255,0,122,.25));
+}
+@keyframes logoPulse{
+0%,100%{filter:drop-shadow(0 0 18px rgba(0,255,245,.5)) drop-shadow(0 0 40px rgba(255,0,122,.25));}
+50%{filter:drop-shadow(0 0 35px rgba(0,255,245,.9)) drop-shadow(0 0 70px rgba(255,0,122,.5)) drop-shadow(0 0 100px rgba(157,0,255,.3));}
 }
 @keyframes chromaShift{0%{background-position:0%;}100%{background-position:300%;}}
-.auth-sub{text-align:center;font-family:‘Share Tech Mono’,monospace;font-size:9px;letter-spacing:4px;color:rgba(0,255,245,.3);text-transform:uppercase;margin-bottom:28px;}
+.auth-sub{text-align:center;font-family:‘Share Tech Mono’,monospace;font-size:9px;letter-spacing:5px;color:rgba(0,255,245,.4);text-transform:uppercase;margin-bottom:28px;text-shadow:0 0 10px rgba(0,255,245,.3);}
 
 .tabs{display:flex;margin-bottom:24px;gap:2px;}
 .tab{flex:1;padding:10px;text-align:center;cursor:pointer;font-family:‘Syncopate’,sans-serif;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,.3);background:rgba(0,255,245,.03);border:1px solid rgba(0,255,245,.08);border-radius:3px;transition:all .2s;}
@@ -313,11 +326,17 @@ background:rgba(2,3,10,.85);backdrop-filter:blur(6px);
 padding:20px;
 }
 .lock-title{
-font-family:‘Syncopate’,sans-serif;font-size:clamp(28px,8vw,52px);font-weight:700;
-letter-spacing:6px;text-align:center;
+font-family:‘Syncopate’,sans-serif;
+font-size:clamp(36px,10vw,64px);
+font-weight:700;
+letter-spacing:10px;
+text-align:center;
 background:linear-gradient(90deg,var(–c-cyan),var(–c-pink),var(–c-yellow),var(–c-cyan));
-background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-animation:chromaShift 3s linear infinite;
+background-size:300%;
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+background-clip:text;
+animation:chromaShift 3s linear infinite, logoPulse 2.5s ease-in-out infinite;
 }
 .lock-sub{font-family:‘Share Tech Mono’,monospace;font-size:10px;letter-spacing:4px;color:rgba(255,255,255,.3);text-align:center;text-transform:uppercase;}
 .lock-hint{font-family:‘Share Tech Mono’,monospace;font-size:10px;letter-spacing:2px;color:rgba(0,255,245,.4);text-align:center;margin-top:-10px;}
@@ -349,20 +368,20 @@ transition:all .3s;min-height:52px;min-width:200px;
   <div id="authCard">
     <div class="corner tl"></div><div class="corner tr"></div>
     <div class="corner bl"></div><div class="corner br"></div>
-    <div class="auth-logo">NEON CITY</div>
-    <div class="auth-sub">// cyberpunk open world //</div>
+    <div class="auth-logo">RYONIX</div>
+    <div class="auth-sub">// nouvelle ère virtuelle //</div>
     <div class="tabs">
       <div class="tab on" onclick="showT('l')">Connexion</div>
       <div class="tab" onclick="showT('r')">S'inscrire</div>
     </div>
     <div id="fL">
-      <div class="field"><label>// Email</label><input id="lE" type="email" inputmode="email" placeholder="runner@neoncity.gg" autocomplete="email"/></div>
+      <div class="field"><label>// Email</label><input id="lE" type="email" inputmode="email" placeholder="runner@ryonix.gg" autocomplete="email"/></div>
       <div class="field"><label>// Password</label><input id="lP" type="password" placeholder="••••••••" autocomplete="current-password"/></div>
       <button class="btn-neon" onclick="doLogin()">[ ACCÉDER AU RÉSEAU ]</button>
     </div>
     <div id="fR" style="display:none">
       <div class="field"><label>// Runner Tag</label><input id="rN" type="text" placeholder="GlitchRunner99" autocomplete="username"/></div>
-      <div class="field"><label>// Email</label><input id="rE" type="email" inputmode="email" placeholder="runner@neoncity.gg" autocomplete="email"/></div>
+      <div class="field"><label>// Email</label><input id="rE" type="email" inputmode="email" placeholder="runner@ryonix.gg" autocomplete="email"/></div>
       <div class="field"><label>// Password</label><input id="rP" type="password" placeholder="Min. 6 chars" autocomplete="new-password"/></div>
       <button class="btn-neon" onclick="doReg()">[ CRÉER MON RUNNER ]</button>
     </div>
@@ -378,14 +397,14 @@ transition:all .3s;min-height:52px;min-width:200px;
 
 <div id="hud">
   <div id="lockOverlay">
-    <div class="lock-title">NEON CITY</div>
+    <div class="lock-title">RYONIX</div>
     <div class="lock-sub">// Open World Cyberpunk //</div>
     <div class="lock-hint" id="lockHint">📱 Joysticks tactiles inclus</div>
     <button class="lock-btn" id="lockBtn">[ ENTRER DANS LA VILLE ]</button>
   </div>
 
   <div id="topbar">
-    <div class="hud-logo">NC//</div>
+    <div class="hud-logo">RX//</div>
     <div class="stat-group">
       <div class="stat-row"><span class="stat-ico">♥</span><span class="stat-name">VIE</span><div class="bar-bg"><div class="bar-f" id="hpF" style="width:100%"></div></div></div>
       <div class="stat-row"><span class="stat-ico">⚡</span><span class="stat-name">EN</span><div class="bar-bg"><div class="bar-f" id="enF" style="width:75%"></div></div></div>
@@ -1058,7 +1077,7 @@ function notif(text,type='cyan'){
 
 // ══ MULTIJOUEUR ══
 function initMP(){
-  CHAN=sb.channel('neon-city-v2',{config:{broadcast:{self:false}}})
+  CHAN=sb.channel('ryonix-v2',{config:{broadcast:{self:false}}})
   CHAN
     .on('broadcast',{event:'move'},({payload})=>moveOther(payload))
     .on('broadcast',{event:'chat'},({payload})=>addChatMsg(payload.name,payload.text))
